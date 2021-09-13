@@ -1,0 +1,9 @@
+[submodule "neovim/.vim/plugged/telescope.nvim"]
+	path = neovim/.vim/plugged/telescope.nvim
+	url = https://github.com/nvim-telescope/
+[submodule "neovim/.vim/plugged/gruvbox"]
+	path = neovim/.vim/plugged/gruvbox
+	url = https://github.com/gruvbox-community/gruvbox
+[submodule "neovim/.vim/plugged/plenary.nvim"]
+	path = neovim/.vim/plugged/plenary.nvim
+	url = https://github.com/nvim-lua/plenary.nvim
