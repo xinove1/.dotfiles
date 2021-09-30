@@ -1,4 +1,4 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
@@ -24,18 +24,22 @@
 ;; (setq doom-font (font-spec :family "Mononoki Nerd Font" :size 13.0)
 ;;       doom-variable-pitch-font (font-spec :family "Mononoki Nerd Font" :size 13.0))
 ;;(setq doom-font (font-spec :family "JetBrains Mono" :size 13.0))
-(setq doom-font (font-spec :family "Roboto Mono" :size 13.0)
-       doom-variable-pitch-font (font-spec :family "Roboto Mono" :size 13.0))
+ ;; (setq doom-font (font-spec :family "Roboto Mono" :size 13.0)
+ ;;         doom-variable-pitch-font (font-spec :family "Roboto Mono" :size 13.0))
 
+ (setq doom-font (font-spec :family "Iosevka Term" :size 13.0)
+         doom-variable-pitch-font (font-spec :family "Iosevka Term" :size 13.0))
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;;(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-horizon)
+;;(setq doom-theme 'doom-gruvbox-light)
 ;; Some themes I liked: doom-peacock, doom-henna, doom-horizon, doom-monokai-pro
 ;;
 ;; Random themes at startup
-(setq doom-theme (seq-random-elt (custom-available-themes)))
+;;(setq doom-theme (seq-random-elt (custom-available-themes)))
 
+(setq doom-theme (seq-random-elt '(doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge)))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -63,7 +67,8 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq treemacs-width 17)
+(setq treemacs-width 20)
+(setq doom-themes-treemacs-theme "doom-colors")
 
 (setq-hook! '(c-mode-hook c++-mode-hook) indent-tabs-mode t)
 
@@ -77,32 +82,33 @@
 ;; (setq org-pomodoro-finished-sound-args)
 
 
-;; old config
-;; Mudando o formato de data do org-mode
 (setq-default org-display-custom-times t)
 (setq org-time-stamp-custom-formats '("<%A %e %b %Y>" . "<%A %e %b %Y %H:%M>"))
+(setq org-agenda-prefix-format
+      '((agenda . " %i %-12:c%?-12t% s")
+        (todo   . " ")
+        (tags   . " %i %-12:c")
+        (search . " %i %-12:c")))
 
-;; mudando o bullet list de org-superstar
-;; (setq-default org-superstar-headline-bullets-list '("☭" "▧" "◈" "ᛜ" "►" "◇"))
-(setq-default org-superstar-headline-bullets-list '("͏" "◈" "▧" "ᛜ" "►" "◇"))
-(add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-
-;; Maximizar no start-up
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+(setq fancy-splash-image (seq-random-elt '("~/grub/imagens/snail2.png" "~/grub/imagens/dardo2.png" "~/grub/imagens/frutacomun.png" "~/grub/imagens/sapo.png" "~/grub/imagens/sapo2.png" "~/grub/imagens/cafe2.png")))
 
 ;; Pretty org mode https://zzamboni.org/post/beautifying-org-mode-in-emacs/
-;;(setq org-hide-emphasis-markers t)
-;;(font-lock-add-keywords 'org-mode'(("^ *\\([-]\\) "(0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-(let* ((variable-tuple
-          (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
-                ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-                ((x-list-fonts "Verdana")         '(:font "Verdana"))
-                ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-                (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+(defun pretty()
+  (let* ((variable-tuple
+          (cond
+           ((x-list-fonts "Roboto Mono")     '(:font "Roboto Mono"))
+           ((x-list-fonts "Iosevka")         '(:font "Iosevka"))
+           ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+           ((x-list-fonts "JetBrains Mono")  '(:font "JetBrains Mono"))
+           ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+           ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+           ((x-list-fonts "Verdana")         '(:font "Verdana"))
+           ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+           (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
          (base-font-color     (face-foreground 'default nil 'default))
-         (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
-
+         (headline           `(:inherit default :weight bold :foreground ,base-font-color))
+         )
     (custom-theme-set-faces
      'user
      `(org-level-8 ((t (,@headline ,@variable-tuple))))
@@ -110,16 +116,17 @@
      `(org-level-6 ((t (,@headline ,@variable-tuple))))
      `(org-level-5 ((t (,@headline ,@variable-tuple))))
      `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.0))))
-     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.1))))
-     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.2))))
-     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.35))))
+     `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.0))))
+     `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.05))))
+     `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.15))))
+     `(org-todo-keyword-active ((t (,@headline ,@variable-tuple :height 0.35))))
      `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))))
-(custom-theme-set-faces
- 'user
-  '(variable-pitch ((t (:family "Fira Code Retina" :height 150 :weight thin))))
-  '(fixed-pitch ((t ( :family "ETBembo" :height 160)))))
-(add-hook 'org-mode-hook 'variable-pitch-mode)
-(custom-theme-set-faces
+  ;; (custom-theme-set-faces
+  ;;  'user
+  ;;  '(variable-pitch ((t (:family "Fira Code Retina" :height 150 :weight thin))))
+  ;;  '(fixed-pitch ((t ( :family "ETBembo" :height 160)))))
+  ;;(add-hook 'org-mode-hook 'variable-pitch-mode)
+  (custom-theme-set-faces
    'user
    '(org-block ((t (:inherit fixed-pitch))))
    '(org-code ((t (:inherit (shadow fixed-pitch)))))
@@ -133,6 +140,41 @@
    '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
    '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
    '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+)
+(defun setup-org()
+  (setq org-superstar-item-bullet-alist
+        '((?* . ?•)
+          (?+ . ?➤)
+          (?- . ?•)))
+  (setq org-superstar-headline-bullets-list '(?\s))
+  (setq org-superstar-special-todo-items t)
+  (setq org-superstar-remove-leading-stars t)
+  ;; Enable custom bullets for TODO items
+  (setq org-superstar-todo-bullet-alist
+        '(("TODO" . ?➤)
+          ("NEXT" . ?☕)
+          ("HOLD" . ?✰)
+          ("WAIT" . ?⏳)
+          ("IDEA" . ?★)
+          ("CANCELLED" . ?✘)
+          ("DONE" . ?✔)))
+  (setq org-superstar-headline-bullets-list '("⬢" "▧" "☭" "ᛜ" "►" "◇"))
+  ;;(setq org-superstar-headline-bullets-list '("☭" "▫▧" "◈" "ᛜ" "►" "◇"))◆
+  ;; I have removed indentation to make the file look cleaner
+  ;; (org-indent-mode -1)
+  ;; (setq line-spacing 0.1
+  ;;       org-pretty-entities t
+  ;;       org-startup-indented t
+  ;;       org-adapt-indentation nil)
+  (variable-pitch-mode +1)
+  (prettify-symbols-mode +1)
+  (org-superstar-mode +1)
+  (org-superstar-restart)
+  (emojify-mode 0)
+)
+(setq org-ellipsis " ⤸")
+(add-hook 'org-mode-hook 'setup-org)
+(add-hook 'org-mode-hook 'pretty)
 
 (use-package org-roam
   :ensure t
@@ -156,6 +198,9 @@
         :desc "Toggle roam buffer"         "r" #'org-roam-buffer-toggle
         :desc "Launch roam buffer"         "R" #'org-roam-buffer-display-dedicated
         :desc "Todo list"                    "t" #'org-todo-list
+        :desc "Calendar"                      "c" #'=calendar
+        :desc "Pomodoro"                      "p" #'org-pomodoro
+        :desc "Woman"                         "w" #'woman
         ;; :desc "Sync database"              "s" #'org-roam-db-sync
          (:prefix ("d" . "by date")
            :desc "Goto previous note"        "b" #'org-roam-dailies-goto-previous-note
@@ -197,3 +242,18 @@
          :desc "View search"                  "v" #'org-search-view
          :desc "Org export to clipboard"        "y" #'+org/export-to-clipboard
          :desc "Org export to clipboard as RTF" "Y" #'+org/export-to-clipboard-as-rich-text)))
+
+(use-package! websocket
+    :after org-roam)
+
+(use-package! org-roam-ui
+    :after org-roam ;; or :after org
+;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+;;         a hookable mode anymore, you're advised to pick something yourself
+;;         if you don't care about startup time, use
+;;  :hook (after-init . org-roam-ui-mode)
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
