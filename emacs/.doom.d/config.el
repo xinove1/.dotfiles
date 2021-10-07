@@ -27,8 +27,10 @@
  ;; (setq doom-font (font-spec :family "Roboto Mono" :size 13.0)
  ;;         doom-variable-pitch-font (font-spec :family "Roboto Mono" :size 13.0))
 
- (setq doom-font (font-spec :family "Iosevka Term" :size 13.0)
-         doom-variable-pitch-font (font-spec :family "Iosevka Term" :size 13.0))
+(setq doom-font (font-spec :family "Iosevka Term" :size 13.0)
+        doom-variable-pitch-font (font-spec :family "Iosevka Term" :size 13.0))
+;; (setq doom-font (font-spec :family "Hack" :size 13.0)
+;;         doom-variable-pitch-font (font-spec :family "Hack" :size 13.0))
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
@@ -73,8 +75,20 @@
 (setq-hook! '(c-mode-hook c++-mode-hook) indent-tabs-mode t)
 
 ;; Dvorak only in insert mode
-(add-hook 'evil-insert-state-entry-hook (lambda () (shell-command "setxkbmap dvorak")))
-(add-hook 'evil-insert-state-exit-hook (lambda () (shell-command "setxkbmap br")))
+(defun change-kbd-dvorak()
+  (setq tmp default-directory)
+  (setq default-directory "~/")
+  (shell-command "setxkbmap dvorak")
+  (setq default-directory tmp))
+
+(defun change-kbd-br()
+  (setq tmp default-directory)
+  (setq default-directory "~/")
+  (shell-command "setxkbmap br")
+  (setq default-directory tmp))
+
+(add-hook 'evil-insert-state-entry-hook 'change-kbd-dvorak)
+(add-hook 'evil-insert-state-exit-hook 'change-kbd-br)
 
 ;; config org pomodoro sons 😏
 (setq org-pomodoro-finished-sound "~/Music/dogdoin.wav")
@@ -257,3 +271,9 @@
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
+
+(defun my/monkeytype-mode-hook ()
+  "Hooks for monkeytype-mode."
+  (centered-cursor-mode)
+  (evil-insert -1))
+(add-hook 'monkeytype-mode-hook #'my/monkeytype-mode-hook)
