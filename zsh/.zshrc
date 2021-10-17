@@ -103,11 +103,14 @@ neofetch
 alias gfunny="git commit -m "$(curl -s http://whatthecommit.com/index.txt)""
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/.emacs.d/bin
+export PATH=$PATH:~/Documents/rtags/bin
 alias n="norminette"
 alias c="cc -Wall -Wextra -Werror -g -fsanitize=address *.c"
 alias t="cc -Wall -Wextra -Werror -g -fsanitize=address *.c && ./a.out"
+alias m="gcc main.c -lmlx -lXext -lX11 -lbsd && ./a.out"
 alias a="./a.out"
 alias flux="redshift -t 4500k:4500k -b 0.6:0.6 -l -25:-49"
+alias flux2="redshift -t 6500k:6500k -b 0.6:0.6 -l -25:-49"
 eval $(thefuck --alias)
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/.doom/bin

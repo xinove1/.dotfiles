@@ -73,6 +73,7 @@
 (setq doom-themes-treemacs-theme "doom-colors")
 
 (setq-hook! '(c-mode-hook c++-mode-hook) indent-tabs-mode t)
+(setq rtags-path "~/Documents/rtags/bin")
 
 ;; Dvorak only in insert mode
 (defun change-kbd-dvorak()
