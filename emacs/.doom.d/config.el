@@ -77,16 +77,19 @@
 
 ;; Dvorak only in insert mode
 (defun change-kbd-dvorak()
-  (setq tmp default-directory)
-  (setq default-directory "~/")
-  (shell-command "setxkbmap dvorak")
-  (setq default-directory tmp))
+  (if (eq major-mode 'vterm-mode)
+       (shell-command "setxkbmap br")
+       (shell-command "setxkbmap dvorak")))
+(eq major-mode "vterm-mode")
+;(setq tmp default-directory)
+;(setq default-directory "~/")
+;(shell-command "setxkbmap br")
+;(setq default-directory tmp)
 
 (defun change-kbd-br()
-  (setq tmp default-directory)
-  (setq default-directory "~/")
-  (shell-command "setxkbmap br")
-  (setq default-directory tmp))
+  (if (not (eq major-mode 'vterm-mode))
+       (shell-command "setxkbmap br")
+       (shell-command "setxkbmap br")))
 
 (add-hook 'evil-insert-state-entry-hook 'change-kbd-dvorak)
 (add-hook 'evil-insert-state-exit-hook 'change-kbd-br)
