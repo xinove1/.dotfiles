@@ -65,3 +65,11 @@
 (package! gitignore-mode
   :recipe (:host github :repo "magit/git-modes"
                 :files ("gitignore-mode.el")))
+
+(package! 42header :recipe
+  (:host github
+   :repo "ggjulio/42header_emacs"
+   :files ("*.el")))
+
+(package! header
+  :recipe (:host github :repo "ggjulio/42header_emacs"))

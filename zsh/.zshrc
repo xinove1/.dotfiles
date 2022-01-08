@@ -70,7 +70,7 @@ ZSH_THEME="refined"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git chucknorris)
+plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -99,21 +99,25 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-neofetch
 alias gfunny="git commit -m "$(curl -s http://whatthecommit.com/index.txt)""
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/.emacs.d/bin
 export PATH=$PATH:~/Documents/rtags/bin
+
 alias n="norminette"
 alias c="cc -Wall -Wextra -Werror -g -fsanitize=address *.c"
 alias t="cc -Wall -Wextra -Werror -g -fsanitize=address *.c && ./a.out"
-alias m="gcc *.c -lmlx -lXext -lX11 -lbsd && ./a.out"
+alias y="cc ./libft/*.c *.c -Wall -Wextra -Werror -g -fsanitize=address -lmlx -lXext -lX11 -lbsd && ./a.out map.ber"
+alias m="gcc *.c ./libft/*.c -lmlx -lXext -lX11 -lbsd && ./a.out map.ber"
 alias a="./a.out"
 alias flux="redshift -t 4500k:4500k -b 0.6:0.6 -l -25:-49"
 alias flux2="redshift -t 6500k:6500k -b 0.6:0.6 -l -25:-49"
+alias k="sh ~/Documents/scripts/.keyboard.sh"
+
 eval $(thefuck --alias)
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/.doom/bin
 export LEDGER_FILE=~/stuff/Notas/2021.journal
-
+export HEADER42_LOGIN=nthomas-
+export HEADER42_MAIL=nthomas-@student.42sp.org.br
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -79,6 +79,7 @@
 (defun change-kbd-dvorak()
   (if (eq major-mode 'vterm-mode)
        (shell-command "setxkbmap br")
+       ;(shell-command "setxkbmap us -variant colemak_dh")))
        (shell-command "setxkbmap dvorak")))
 (eq major-mode "vterm-mode")
 ;(setq tmp default-directory)
@@ -219,6 +220,7 @@
         :desc "Calendar"                      "c" #'=calendar
         :desc "Pomodoro"                      "p" #'org-pomodoro
         :desc "Woman"                         "w" #'woman
+        :desc "42 header"                     "h" #'header-insert
         ;; :desc "Sync database"              "s" #'org-roam-db-sync
          (:prefix ("d" . "by date")
            :desc "Goto previous note"        "b" #'org-roam-dailies-goto-previous-note
@@ -289,3 +291,21 @@
                                 "--header-insertion=never"
                                 "--header-insertion-decorators=0"))
 (after! lsp-clangd (set-lsp-priority! 'clangd 2))
+
+(load "~/.doom.d/lisp/header.el")
+
+(with-eval-after-load 'ox-latex
+(add-to-list 'org-latex-classes
+             '("org-plain-latex"
+               "\\documentclass{article}
+           [NO-DEFAULT-PACKAGES]
+           [PACKAGES]
+           [EXTRA]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(add-hook 'window-setup-hook (lambda () (find-file "~/stuff/Notas/roam/20210913110509-home.org")))
+(add-hook 'window-setup-hook #'doom/quickload-session)
