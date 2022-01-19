@@ -110,8 +110,8 @@ alias t="cc -Wall -Wextra -Werror -g -fsanitize=address *.c && ./a.out"
 alias y="cc ./libft/*.c *.c -Wall -Wextra -Werror -g -fsanitize=address -lmlx -lXext -lX11 -lbsd && ./a.out map.ber"
 alias m="gcc *.c ./libft/*.c -lmlx -lXext -lX11 -lbsd && ./a.out map.ber"
 alias a="./a.out"
-alias flux="redshift -t 4500k:4500k -b 0.6:0.6 -l -25:-49"
-alias flux2="redshift -t 6500k:6500k -b 0.6:0.6 -l -25:-49"
+alias flux="redshift -t 2500k:2500k -b 0.6:0.6 -l -25:-49"
+alias flux2="redshift -t 4500k:4500k -b 0.6:0.6 -l -25:-49"
 alias k="sh ~/Documents/scripts/.keyboard.sh"
 
 eval $(thefuck --alias)
