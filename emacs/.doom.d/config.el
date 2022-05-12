@@ -24,17 +24,27 @@
 ;; (setq doom-font (font-spec :family "Mononoki Nerd Font" :size 13.0)
 ;;       doom-variable-pitch-font (font-spec :family "Mononoki Nerd Font" :size 13.0))
 ;;(setq doom-font (font-spec :family "JetBrains Mono" :size 13.0))
- ;; (setq doom-font (font-spec :family "Roboto Mono" :size 13.0)
+  ;;(setq doom-font (font-spec :family "Roboto Mono" :size 13.0))
  ;;         doom-variable-pitch-font (font-spec :family "Roboto Mono" :size 13.0))
 
-(setq doom-font (font-spec :family "Iosevka Term" :size 13.0)
-        doom-variable-pitch-font (font-spec :family "Iosevka Term" :size 13.0))
-;; (setq doom-font (font-spec :family "Hack" :size 13.0)
+
+(setq doom-font (font-spec :family "Roboto Mono" :size 13.0))
+;(setq doom-font (font-spec :family "Iosevka Term" :size 13.0))
+;(setq doom-font (font-spec :family "Hack" :size 13.0))
+;(setq doom-font (font-spec :family "JetBrains Mono" :size 13.0))
+;(setq doom-font (font-spec :family "Mononoki Nerd Font" :size 13.0))
+
+;(setq doom-font (seq-random-elt ('(font-spec :family "Hack" :size 13.0)
+;                                 '(font-spec :family "JetBrains Mono" :size 13.0))))
+
+;;(setq doom-font (font-spec :family "Iosevka Term" :size 13.0)
+;;        doom-variable-pitch-font (font-spec :family "Iosevka Term" :size 13.0))
+;; (setq doom-font (font-spec :family "Hack" :size 13.0))
 ;;         doom-variable-pitch-font (font-spec :family "Hack" :size 13.0))
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-horizon)
+;;(setq doom-theme 'doom-horizon)
 ;;(setq doom-theme 'doom-gruvbox-light)
 ;; Some themes I liked: doom-peacock, doom-henna, doom-horizon, doom-monokai-pro
 ;;
@@ -110,21 +120,22 @@
         (search . " %i %-12:c")))
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(setq fancy-splash-image (seq-random-elt '("~/grub/imagens/snail2.png" "~/grub/imagens/dardo2.png" "~/grub/imagens/frutacomun.png" "~/grub/imagens/sapo.png" "~/grub/imagens/sapo2.png" "~/grub/imagens/cafe2.png")))
+;;(setq fancy-splash-image (seq-random-elt '("~/grub/imagens/snail2.png" "~/grub/imagens/dardo2.png" "~/grub/imagens/frutacomun.png" "~/grub/imagens/sapo.png" "~/grub/imagens/sapo2.png" "~/grub/imagens/cafe2.png")))
 
 ;; Pretty org mode https://zzamboni.org/post/beautifying-org-mode-in-emacs/
 (defun pretty()
   (let* ((variable-tuple
           (cond
-           ((x-list-fonts "Roboto Mono")     '(:font "Roboto Mono"))
-           ((x-list-fonts "Iosevka")         '(:font "Iosevka"))
            ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+           (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))
+           ((x-list-fonts "Iosevka")         '(:font "Iosevka"))
+           ((x-list-fonts "Roboto Mono")     '(:font "Roboto Mono"))
            ((x-list-fonts "JetBrains Mono")  '(:font "JetBrains Mono"))
            ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
            ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
            ((x-list-fonts "Verdana")         '(:font "Verdana"))
            ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-           (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+          ))
          (base-font-color     (face-foreground 'default nil 'default))
          (headline           `(:inherit default :weight bold :foreground ,base-font-color))
          )
@@ -191,20 +202,32 @@
   (org-superstar-restart)
   (emojify-mode 0)
 )
-(setq org-ellipsis " ⤸")
-(add-hook 'org-mode-hook 'setup-org)
+(setq org-ellipsis " ,,,")
+;(add-hook 'org-mode-hook 'setup-org)
 (add-hook 'org-mode-hook 'pretty)
 
 (use-package org-roam
   :ensure t
   :init (setq org-roam-v2-ack t)
-  :custom (org-roam-directory "~/stuff/Notas/roam")
+  :custom
+  (org-roam-directory "~/stuff/Notas/roam")
   :config (org-roam-setup))
+
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry "* %? - %<%A %d %R>"
+         :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
+        ("h" "jush heading" entry "* %?"
+         :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
+        ("t" "todo" entry "* TODO %?"
+         :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
+        ("j" "journal" entry "*  [[id:d10cd556-cc88-4393-96d2-11526fa4fcfe][Journal]] - %<%A %d %R> \n  - %?"
+         :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
 
 (map! :leader
       (:prefix-map ("n" . "Org roam")
         :desc "Node find" "f" #'org-roam-node-find
         :desc "Node insert" "i" #'org-roam-node-insert
+        :desc "Node immediate insert" "I" #'org-roam-node-insert-immediate
         :desc "Buffer toggle" "l" #'org-roam-buffer-toggle
         :desc "Org capture finalize" "s" #'org-capture-finalize
         ;; Bindings from doom, activate as needed
@@ -219,8 +242,8 @@
         :desc "Todo list"                    "t" #'org-todo-list
         :desc "Calendar"                      "c" #'=calendar
         :desc "Pomodoro"                      "p" #'org-pomodoro
-        :desc "Woman"                         "w" #'woman
-        :desc "42 header"                     "h" #'header-insert
+
+        ;; :desc "42 header"                     "h" #'header-insert
         ;; :desc "Sync database"              "s" #'org-roam-db-sync
          (:prefix ("d" . "by date")
            :desc "Goto previous note"        "b" #'org-roam-dailies-goto-previous-note
@@ -284,28 +307,116 @@
   (evil-insert -1))
 (add-hook 'monkeytype-mode-hook #'my/monkeytype-mode-hook)
 
+(after! ccls
+  (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
+  (set-lsp-priority! 'ccls 2)) ; optional as ccls is the default in Doom
+
 (setq lsp-clients-clangd-args '("-j=3"
                                 "--background-index"
                                 "--clang-tidy"
                                 "--completion-style=detailed"
                                 "--header-insertion=never"
                                 "--header-insertion-decorators=0"))
-(after! lsp-clangd (set-lsp-priority! 'clangd 2))
+;(after! lsp-clangd (set-lsp-priority! 'clangd 2))
+
 
 (load "~/.doom.d/lisp/header.el")
 
-(with-eval-after-load 'ox-latex
-(add-to-list 'org-latex-classes
-             '("org-plain-latex"
-               "\\documentclass{article}
-           [NO-DEFAULT-PACKAGES]
-           [PACKAGES]
-           [EXTRA]"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
-
 (add-hook 'window-setup-hook (lambda () (find-file "~/stuff/Notas/roam/20210913110509-home.org")))
 (add-hook 'window-setup-hook #'doom/quickload-session)
+
+;;
+;;
+(defun org-roam-node-insert-immediate (arg &rest args)
+  (interactive "P")
+  (let ((args (push arg args))
+        (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                  '(:immediate-finish t)))))
+    (apply #'org-roam-node-insert args)))
+
+(defun my/org-roam-filter-by-tag (tag-name)
+  (lambda (node)
+    (member tag-name (org-roam-node-tags node))))
+
+(defun my/org-roam-list-notes-by-tag (tag-name)
+  (mapcar #'org-roam-node-file
+          (seq-filter
+           (my/org-roam-filter-by-tag tag-name)
+           (org-roam-node-list))))
+
+(defun my/org-roam-refresh-agenda-list ()
+  (interactive)
+  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
+
+;; Build the agenda list the first time for the session
+(my/org-roam-refresh-agenda-list)
+
+(defun my/org-roam-project-finalize-hook ()
+  "Adds the captured project file to `org-agenda-files' if the
+capture was not aborted."
+  ;; Remove the hook since it was added temporarily
+  (remove-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+  ;; Add project file to the agenda list if the capture was confirmed
+  (unless org-note-abort
+    (with-current-buffer (org-capture-get :buffer)
+      (add-to-list 'org-agenda-files (buffer-file-name)))))
+
+(defun my/org-roam-find-project ()
+  (interactive)
+  ;; Add the project file to the agenda after capture is finished
+  (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+  ;; Select a project file to open, creating it if necessary
+  (org-roam-node-find
+   nil
+   nil
+   (my/org-roam-filter-by-tag "Project")
+   :templates
+   '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
+      :unnarrowed t))))
+
+(defun my/org-roam-capture-inbox ()
+  (interactive)
+  (org-roam-capture- :node (org-roam-node-create)
+                     :templates '(("i" "inbox" plain "* %?"
+                                  :if-new (file+head "Inbox.org" "#+title: Inbox\n")))))
+
+(defun my/org-roam-capture-task ()
+  (interactive)
+  ;; Add the project file to the agenda after capture is finished
+  (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+  ;; Capture the new task, creating the project file if necessary
+  (org-roam-capture- :node (org-roam-node-read
+                            nil
+                            (my/org-roam-filter-by-tag "Project"))
+                     :templates '(("p" "project" plain "** TODO %?"
+                                   :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
+                                                          "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
+                                                          ("Tasks"))))))
+
+(defun my/org-roam-copy-todo-to-today ()
+  (interactive)
+  (let ((org-refile-keep t) ;; Set this to nil to delete the original!
+        (org-roam-dailies-capture-templates
+          '(("t" "tasks" entry "%?"
+             :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
+        (org-after-refile-insert-hook #'save-buffer)
+        today-file
+        pos)
+    (save-window-excursion
+      (org-roam-dailies--capture (current-time) t)
+      (setq today-file (buffer-file-name))
+      (setq pos (point)))
+
+    ;; Only refile if the target file is different than the current file
+    (unless (equal (file-truename today-file)
+                   (file-truename (buffer-file-name)))
+      (org-refile nil nil (list "Tasks" today-file nil pos)))))
+
+(add-to-list 'org-after-todo-state-change-hook
+             (lambda ()
+               (when (equal org-state "DONE")
+                 (my/org-roam-copy-todo-to-today))))
