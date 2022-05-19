@@ -1,68 +1,60 @@
-;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
-(setq user-full-name "xinove"
-      user-mail-address "xinovebig@gmail.com")
+;; clients, file templates and snippets. It is optional.
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
+;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
+;; - `doom-font' -- the primary font to use
+;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
+;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
 ;;   presentations or streaming.
+;; - `doom-unicode-font' -- for unicode glyphs
+;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
 ;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
- ;; (setq doom-font (font-spec :family "monospace" :size 13 :weight 'semi-light)
- ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-;; (setq doom-font (font-spec :family "Mononoki Nerd Font" :size 13.0)
-;;       doom-variable-pitch-font (font-spec :family "Mononoki Nerd Font" :size 13.0))
-;;(setq doom-font (font-spec :family "JetBrains Mono" :size 13.0))
-  ;;(setq doom-font (font-spec :family "Roboto Mono" :size 13.0))
- ;;         doom-variable-pitch-font (font-spec :family "Roboto Mono" :size 13.0))
+;; See 'C-h v doom-font' for documentation and more examples of what they
+;; accept. For example:
+;;
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
+;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+;;
+;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
+;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
+;; refresh your font settings. If Emacs still can't find your font, it likely
+;; wasn't installed correctly. Font issues are rarely Doom issues!
 
-
-(setq doom-font (font-spec :family "Roboto Mono" :size 13.0))
-;(setq doom-font (font-spec :family "Iosevka Term" :size 13.0))
-;(setq doom-font (font-spec :family "Hack" :size 13.0))
-;(setq doom-font (font-spec :family "JetBrains Mono" :size 13.0))
-;(setq doom-font (font-spec :family "Mononoki Nerd Font" :size 13.0))
-
-;(setq doom-font (seq-random-elt ('(font-spec :family "Hack" :size 13.0)
-;                                 '(font-spec :family "JetBrains Mono" :size 13.0))))
-
-;;(setq doom-font (font-spec :family "Iosevka Term" :size 13.0)
-;;        doom-variable-pitch-font (font-spec :family "Iosevka Term" :size 13.0))
-;; (setq doom-font (font-spec :family "Hack" :size 13.0))
-;;         doom-variable-pitch-font (font-spec :family "Hack" :size 13.0))
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;;(setq doom-theme 'doom-horizon)
-;;(setq doom-theme 'doom-gruvbox-light)
-;; Some themes I liked: doom-peacock, doom-henna, doom-horizon, doom-monokai-pro
-;;
-;; Random themes at startup
-;;(setq doom-theme (seq-random-elt (custom-available-themes)))
-
-(setq doom-theme (seq-random-elt '(doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge)))
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/stuff/Notas")
+;(setq doom-theme 'doom-one)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+;(setq display-line-numbers-type t)
+
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+;(setq org-directory "~/org/")
 
 
-;; Here are some additional functions/macros that could help you configure Doom:
+;; Whenever you reconfigure a package, make sure to wrap your config in an
+;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
+;;
+;;   (after! PACKAGE
+;;     (setq x y))
+;;
+;; The exceptions to this rule:
+;;
+;;   - Setting file/directory variables (like `org-directory')
+;;   - Setting variables which explicitly tell you to set them before their
+;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
+;;   - Setting doom variables (which start with 'doom-' or '+').
+;;
+;; Here are some additional functions/macros that will help you configure Doom.
 ;;
 ;; - `load!' for loading external *.el files relative to this one
 ;; - `use-package!' for configuring packages
@@ -75,15 +67,33 @@
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
 ;; This will open documentation for it, including demos of how they are used.
+;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
+;; etc).
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq treemacs-width 20)
-(setq doom-themes-treemacs-theme "doom-colors")
+(setq user-full-name "xinove"
+      user-mail-address "xinovebig@gmail.com")
 
-(setq-hook! '(c-mode-hook c++-mode-hook) indent-tabs-mode t)
-(setq rtags-path "~/Documents/rtags/bin")
+(setq doom-font (font-spec :family "Roboto Mono" :size 13.0))
+;(setq doom-font (font-spec :family "Iosevka Term" :size 13.0))
+;(setq doom-font (font-spec :family "Hack" :size 13.0))
+;(setq doom-font (font-spec :family "JetBrains Mono" :size 13.0))
+;(setq doom-font (font-spec :family "Mononoki Nerd Font" :size 13.0))
+
+
+(setq doom-theme (seq-random-elt '(doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge)))
+
+(setq org-directory "~/stuff/Notas")
+
+(setq display-line-numbers-type t)
+
+;(setq treemacs-width 20)
+;(setq doom-themes-treemacs-theme "doom-colors")
+
+;(setq-hook! '(c-mode-hook c++-mode-hook) indent-tabs-mode t)
+;(setq rtags-path "~/Documents/rtags/bin")
 
 ;; Dvorak only in insert mode
 (defun change-kbd-dvorak()
@@ -206,12 +216,12 @@
 ;(add-hook 'org-mode-hook 'setup-org)
 (add-hook 'org-mode-hook 'pretty)
 
-(use-package org-roam
-  :ensure t
-  :init (setq org-roam-v2-ack t)
-  :custom
-  (org-roam-directory "~/stuff/Notas/roam")
-  :config (org-roam-setup))
+;; (use-package org-roam
+;;   :ensure t
+;;   :init (setq org-roam-v2-ack t)
+;;   :custom
+;;   (org-roam-directory "~/stuff/Notas/roam")
+;;   :config (org-roam-setup))
 
 (setq org-roam-dailies-capture-templates
       '(("d" "default" entry "* %? - %<%A %d %R>"
@@ -301,11 +311,11 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
-(defun my/monkeytype-mode-hook ()
-  "Hooks for monkeytype-mode."
-  (centered-cursor-mode)
-  (evil-insert -1))
-(add-hook 'monkeytype-mode-hook #'my/monkeytype-mode-hook)
+;; (defun my/monkeytype-mode-hook ()
+;;   "Hooks for monkeytype-mode."
+;;   (centered-cursor-mode)
+;;   (evil-insert -1))
+;; (add-hook 'monkeytype-mode-hook #'my/monkeytype-mode-hook)
 
 (after! ccls
   (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
@@ -320,7 +330,7 @@
 ;(after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
 
-(load "~/.doom.d/lisp/header.el")
+;(load "~/.doom.d/lisp/header.el")
 
 (add-hook 'window-setup-hook (lambda () (find-file "~/stuff/Notas/roam/20210913110509-home.org")))
 (add-hook 'window-setup-hook #'doom/quickload-session)

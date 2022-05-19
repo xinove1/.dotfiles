@@ -49,27 +49,6 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-(package! org-roam)
-(package! org-pomodoro)
-(package! org-superstar)
-(unpin! org-roam)
+;(package! org-superstar)
 (package! websocket)
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
-
-(package! monkeytype)
-(package! evil-tutor)
-(package! vterm-toggle)
-(package! gitconfig-mode
-  :recipe (:host github :repo "magit/git-modes"
-                        :files ("gitconfig-mode.el")))
-(package! gitignore-mode
-  :recipe (:host github :repo "magit/git-modes"
-                :files ("gitignore-mode.el")))
-
-(package! 42header :recipe
-  (:host github
-   :repo "ggjulio/42header_emacs"
-   :files ("*.el")))
-
-(package! header
-  :recipe (:host github :repo "ggjulio/42header_emacs"))
