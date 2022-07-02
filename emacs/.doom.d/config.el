@@ -76,23 +76,34 @@
 (setq user-full-name "xinove"
       user-mail-address "xinovebig@gmail.com")
 
-(setq doom-font (font-spec :family "Roboto Mono" :size 13.0))
+;(setq doom-font (font-spec :family "Roboto Mono" :size 13.0))
 ;(setq doom-font (font-spec :family "Iosevka Term" :size 13.0))
 ;(setq doom-font (font-spec :family "Hack" :size 13.0))
 ;(setq doom-font (font-spec :family "JetBrains Mono" :size 13.0))
 ;(setq doom-font (font-spec :family "Mononoki Nerd Font" :size 13.0))
 
+(setq doom-font (seq-random-elt '("JetBrains Mono-13"
+                                 "Mononoki Nerd Font-13"
+                                 "Roboto Mono-13"
+                                 "Hack-13"
+                                 "Iosevka Term-13")))
 
-(setq doom-theme (seq-random-elt '(doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge)))
+(setq doom-theme (seq-random-elt '(doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge
+                                   doom-molokai doom-monokai-pro doom-old-hope doom-gruvbox)))
 
 (setq org-directory "~/stuff/Notas")
 
 (setq display-line-numbers-type t)
 
+(with-eval-after-load 'evil
+    (defalias #'forward-evil-word #'forward-evil-symbol)
+    ;; make evil-search-word look for symbol rather than word boundaries
+    (setq-default evil-symbol-word-search t))
+
 ;(setq treemacs-width 20)
 ;(setq doom-themes-treemacs-theme "doom-colors")
 
-;(setq-hook! '(c-mode-hook c++-mode-hook) indent-tabs-mode t)
+(setq-hook! '(c-mode-hook c++-mode-hook) indent-tabs-mode t)
 ;(setq rtags-path "~/Documents/rtags/bin")
 
 ;; Dvorak only in insert mode
@@ -220,7 +231,7 @@
 ;;   :ensure t
 ;;   :init (setq org-roam-v2-ack t)
 ;;   :custom
-;;   (org-roam-directory "~/stuff/Notas/roam")
+   (setq org-roam-directory "~/stuff/Notas/roam")
 ;;   :config (org-roam-setup))
 
 (setq org-roam-dailies-capture-templates
@@ -321,13 +332,13 @@
   (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
   (set-lsp-priority! 'ccls 2)) ; optional as ccls is the default in Doom
 
-(setq lsp-clients-clangd-args '("-j=3"
-                                "--background-index"
-                                "--clang-tidy"
-                                "--completion-style=detailed"
-                                "--header-insertion=never"
-                                "--header-insertion-decorators=0"))
-;(after! lsp-clangd (set-lsp-priority! 'clangd 2))
+;; (setq lsp-clients-clangd-args '("-j=3"
+;;                                 "--background-index"
+;;                                 "--clang-tidy"
+;;                                 "--completion-style=detailed"
+;;                                 "--header-insertion=never"
+;;                                 "--header-insertion-decorators=0"))
+;; (after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
 
 ;(load "~/.doom.d/lisp/header.el")
@@ -335,98 +346,6 @@
 (add-hook 'window-setup-hook (lambda () (find-file "~/stuff/Notas/roam/20210913110509-home.org")))
 (add-hook 'window-setup-hook #'doom/quickload-session)
 
-;;
-;;
-(defun org-roam-node-insert-immediate (arg &rest args)
-  (interactive "P")
-  (let ((args (push arg args))
-        (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-                                                  '(:immediate-finish t)))))
-    (apply #'org-roam-node-insert args)))
+(setq ranger-show-hidden t)
 
-(defun my/org-roam-filter-by-tag (tag-name)
-  (lambda (node)
-    (member tag-name (org-roam-node-tags node))))
-
-(defun my/org-roam-list-notes-by-tag (tag-name)
-  (mapcar #'org-roam-node-file
-          (seq-filter
-           (my/org-roam-filter-by-tag tag-name)
-           (org-roam-node-list))))
-
-(defun my/org-roam-refresh-agenda-list ()
-  (interactive)
-  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
-
-;; Build the agenda list the first time for the session
-(my/org-roam-refresh-agenda-list)
-
-(defun my/org-roam-project-finalize-hook ()
-  "Adds the captured project file to `org-agenda-files' if the
-capture was not aborted."
-  ;; Remove the hook since it was added temporarily
-  (remove-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
-
-  ;; Add project file to the agenda list if the capture was confirmed
-  (unless org-note-abort
-    (with-current-buffer (org-capture-get :buffer)
-      (add-to-list 'org-agenda-files (buffer-file-name)))))
-
-(defun my/org-roam-find-project ()
-  (interactive)
-  ;; Add the project file to the agenda after capture is finished
-  (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
-
-  ;; Select a project file to open, creating it if necessary
-  (org-roam-node-find
-   nil
-   nil
-   (my/org-roam-filter-by-tag "Project")
-   :templates
-   '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
-      :unnarrowed t))))
-
-(defun my/org-roam-capture-inbox ()
-  (interactive)
-  (org-roam-capture- :node (org-roam-node-create)
-                     :templates '(("i" "inbox" plain "* %?"
-                                  :if-new (file+head "Inbox.org" "#+title: Inbox\n")))))
-
-(defun my/org-roam-capture-task ()
-  (interactive)
-  ;; Add the project file to the agenda after capture is finished
-  (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
-
-  ;; Capture the new task, creating the project file if necessary
-  (org-roam-capture- :node (org-roam-node-read
-                            nil
-                            (my/org-roam-filter-by-tag "Project"))
-                     :templates '(("p" "project" plain "** TODO %?"
-                                   :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
-                                                          "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
-                                                          ("Tasks"))))))
-
-(defun my/org-roam-copy-todo-to-today ()
-  (interactive)
-  (let ((org-refile-keep t) ;; Set this to nil to delete the original!
-        (org-roam-dailies-capture-templates
-          '(("t" "tasks" entry "%?"
-             :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
-        (org-after-refile-insert-hook #'save-buffer)
-        today-file
-        pos)
-    (save-window-excursion
-      (org-roam-dailies--capture (current-time) t)
-      (setq today-file (buffer-file-name))
-      (setq pos (point)))
-
-    ;; Only refile if the target file is different than the current file
-    (unless (equal (file-truename today-file)
-                   (file-truename (buffer-file-name)))
-      (org-refile nil nil (list "Tasks" today-file nil pos)))))
-
-(add-to-list 'org-after-todo-state-change-hook
-             (lambda ()
-               (when (equal org-state "DONE")
-                 (my/org-roam-copy-todo-to-today))))
+(after! org-roam (load! "org_roam_custom.el"))
