@@ -1,3 +1,2 @@
-#!/usr/bin/env sh
-emacs --daemon
-pulseaudio --start &
+#!/usr/bin/env bash
+emacs --daemon > $HOME/.log_emacs &
