@@ -108,7 +108,7 @@
 
 ;; Dvorak only in insert mode
 (defun change-kbd-dvorak()
-  (if (eq major-mode 'vterm-mode)
+  (if (or (eq major-mode 'shell-mode ) (eq major-mode 'vterm-mode ))
        (shell-command "setxkbmap br")
        ;(shell-command "setxkbmap us -variant colemak_dh")))
        (shell-command "setxkbmap dvorak")))
@@ -119,7 +119,7 @@
 ;(setq default-directory tmp)
 
 (defun change-kbd-br()
-  (if (not (eq major-mode 'vterm-mode))
+  (if (not (or (eq major-mode 'shell-mode ) (eq major-mode 'vterm-mode )))
        (shell-command "setxkbmap br")
        (shell-command "setxkbmap br")))
 
@@ -243,6 +243,9 @@
          :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
         ("j" "journal" entry "*  [[id:d10cd556-cc88-4393-96d2-11526fa4fcfe][Journal]] - %<%A %d %R> \n  - %?"
          :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
+
+(map! :leader
+      :desc "vterm" "?" #'vterm)
 
 (map! :leader
       (:prefix-map ("n" . "Org roam")

@@ -1,5 +1,5 @@
-/* See LICENSE file for copyright and license details. */
-
+// -*- compile-command: "cc program.c && ./program"; -*-
+//* See LICENSE file for copyright and license details. */
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -19,7 +19,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "emacs", "browser", "discord", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = {"/=\\", "Emacs", "Browser", "Discord", "4", "5", "6", "7", "8"};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -39,9 +39,9 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[Tiling]",      tile },    /* first entry is default */
-	{ "[Flating]",     NULL },    /* no layout function means floating behavior */
-	{ "[Moncle]",      monocle },
+	{ "[Tl]",      tile },    /* first entry is default */
+	{ "[Floating]",     NULL },    /* no layout function means floating behavior */
+	{ "[Monocle]",      monocle },
 };
 
 /* key definitions */
@@ -60,7 +60,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
-static const char *emacs_client[]  = { "emacsclient", "-c", "-a", " ", NULL };
+static const char *emacs_client[]  = { "emacsclient", "-c", "-a", "emacs --daemon", NULL };
 static const char *change_layout[]  = { "sh", "-c", "$HOME/Documents/scripts/change_layout.sh", NULL };
 
 static Key keys[] = {
@@ -97,6 +97,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             -1,         XK_q,      quit,           {0} },
 	{ MODKEY,                       XK_a,       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_a,       XK_t,      spawn,          {.v = termcmd } },
+	TAGKEYS(                        XK_d,       XK_h,                      0)
+	TAGKEYS(                        XK_d,       XK_j,                      1)
+	TAGKEYS(                        XK_d,       XK_k,                      2)
+	TAGKEYS(                        XK_d,       XK_l,                      3)
 	TAGKEYS(                        -1,         XK_1,                      0)
 	TAGKEYS(                        -1,         XK_2,                      1)
 	TAGKEYS(                        -1,         XK_3,                      2)
