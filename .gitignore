@@ -1,2 +1,7 @@
 *.o
 *.a
+dmenu
+dwm
+config.h
+*.rej
+*.orig

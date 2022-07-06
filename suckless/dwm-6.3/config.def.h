@@ -95,8 +95,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_w,       XK_j,      tagtoleft,      {0} },
 	{ MODKEY,                       XK_w,       XK_k,      tagtoright,     {0} },
 	{ MODKEY|ShiftMask,             -1,         XK_q,      quit,           {0} },
-	{ MODKEY,                       XK_a,       XK_d,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_a,       XK_t,      spawn,          {.v = termcmd } },
+	{ MODKEY|ControlMask|ShiftMask, -1,         XK_q,      quit,           {1} },
 	TAGKEYS(                        XK_d,       XK_h,                      0)
 	TAGKEYS(                        XK_d,       XK_j,                      1)
 	TAGKEYS(                        XK_d,       XK_k,                      2)
