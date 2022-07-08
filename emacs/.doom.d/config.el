@@ -352,3 +352,8 @@
 (setq ranger-show-hidden t)
 
 (after! org-roam (load! "org_roam_custom.el"))
+
+(after! projectile
+  (setq projectile-project-root-files-bottom-up '(".projectile" ".project"))
+  (setq projectile-project-root-files-top-down-recurring '( ".projectile" ".project")))
+

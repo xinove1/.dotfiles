@@ -1,21 +1,28 @@
 // -*- compile-command: "cc program.c && ./program"; -*-
 //* See LICENSE file for copyright and license details. */
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Roboto Mono:size=10" };
 static const char dmenufont[]       = "Roboto Mono:size=10";
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
+/* static const char color1[]       = "#50629a"; // background color of bar */
+/* static const char color2[]       = "#444444"; // unfocused window */
+/* static const char color3[]       = "#eeead9"; */
+/* static const char color4[]       = "#f5e9a8";// focused window and tags */
+/* static const char color5[]       = "#f5e9a8";// focused window and tags */
+static const char color1[]       = "#0b0956"; // background of bar and border of unfocused window
+static const char color2[]       = "#4b0956"; // background of current tag and window name
+static const char color3[]       = "#8f0956"; // Window border focused window
+static const char color4[]       = "#a9ff6c"; // Font for Selected tag and window name
+static const char color5[]       = "#a9c36c"; // Font for tags and status
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeNorm] = { color5, color1, color1 },
+	[SchemeSel]  = { color4, color2, color3 },
+	// bar font . bar background status and unselectd tags . border of unfocused window
+	// bar font selected tag and name of window . bar background for selected tag and window info . focused window border
 };
 
 /* tagging */
@@ -58,18 +65,23 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", color1, "-nf", color3, "-sb", color5, "-sf", color4, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
-static const char *emacs_client[]  = { "emacsclient", "-c", "-a", "emacs --daemon", NULL };
-static const char *change_layout[]  = { "sh", "-c", "$HOME/Documents/scripts/change_layout.sh", NULL };
 
 static Key keys[] = {
 	/* modifier                     chain key   key        function        argument */
+	// Opening programs
 	{ MODKEY,                       -1,         XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       -1,         XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       -1,         XK_m,      spawn,          {.v = emacs_client } },
-	{ MOD2KEY,                      -1,         XK_space,  spawn,          {.v = change_layout} },
-	{ MODKEY,                       -1,         XK_b,      togglebar,      {0} },
+	{ MODKEY,                       XK_o,       XK_m,      spawn,          SHCMD("emacsclient -c -a 'emacs'") },
+	{ MODKEY,                       XK_o,       XK_r,      spawn,          SHCMD("emacsclient -c -a 'emacs' --eval '(ranger)'") },
+	{ MODKEY,                       XK_o,       XK_b,      spawn,          SHCMD("firefox") },
+	{ MODKEY,                       XK_o,       XK_d,      spawn,          SHCMD("discord") },
+	{ MOD2KEY,                      -1,         XK_space,  spawn,          SHCMD("~/Documents/scripts/change_layout.sh") },
+	{ MOD2KEY|ShiftMask,            -1,         XK_s,      spawn,          SHCMD("flameshot gui") },
+
+    // Layout/Window movement and manipulation
+	//{ MODKEY,                       -1,         XK_b,      togglebar,      {0} },
 	{ MODKEY,                       -1,         XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       -1,         XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       -1,         XK_i,      incnmaster,     {.i = +1 } },
@@ -84,22 +96,24 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             -1,         XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY|ShiftMask,             -1,         XK_space,  setlayout,      {0} },
 	//{ MODKEY|ShiftMask,             -1,         XK_space,  togglefloating, {0} },
-	{ MODKEY,                       -1,         XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             -1,         XK_0,      tag,            {.ui = ~0 } },
+
+    // Screen movement and manipulation
 	{ MODKEY,                       -1,         XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       -1,         XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             -1,         XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             -1,         XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_w,       XK_h,      viewtoleft,     {0} },
-	{ MODKEY,                       XK_w,       XK_l,      viewtoright,    {0} },
-	{ MODKEY,                       XK_w,       XK_j,      tagtoleft,      {0} },
-	{ MODKEY,                       XK_w,       XK_k,      tagtoright,     {0} },
-	{ MODKEY|ShiftMask,             -1,         XK_q,      quit,           {0} },
-	{ MODKEY|ControlMask|ShiftMask, -1,         XK_q,      quit,           {1} },
-	TAGKEYS(                        XK_d,       XK_h,                      0)
-	TAGKEYS(                        XK_d,       XK_j,                      1)
-	TAGKEYS(                        XK_d,       XK_k,                      2)
-	TAGKEYS(                        XK_d,       XK_l,                      3)
+
+    // Tag movement and manipulation
+	{ MODKEY,                       -1,         XK_0,      view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             -1,         XK_0,      tag,            {.ui = ~0 } },
+	{ MODKEY,                       XK_d,       XK_h,      viewtoleft,     {0} },
+	{ MODKEY,                       XK_d,       XK_l,      viewtoright,    {0} },
+	{ MODKEY,                       XK_d,       XK_j,      tagtoleft,      {0} },
+	{ MODKEY,                       XK_d,       XK_k,      tagtoright,     {0} },
+	TAGKEYS(                        XK_w,       XK_h,                      0)
+	TAGKEYS(                        XK_w,       XK_j,                      1)
+	TAGKEYS(                        XK_w,       XK_k,                      2)
+	TAGKEYS(                        XK_w,       XK_l,                      3)
 	TAGKEYS(                        -1,         XK_1,                      0)
 	TAGKEYS(                        -1,         XK_2,                      1)
 	TAGKEYS(                        -1,         XK_3,                      2)
@@ -109,6 +123,10 @@ static Key keys[] = {
 	TAGKEYS(                        -1,         XK_7,                      6)
 	TAGKEYS(                        -1,         XK_8,                      7)
 	TAGKEYS(                        -1,         XK_9,                      8)
+
+	// Misc
+	{ MODKEY|ShiftMask,             -1,         XK_q,      quit,           {0} },
+	{ MODKEY|ControlMask|ShiftMask, -1,         XK_q,      quit,           {1} },
 };
 
 
