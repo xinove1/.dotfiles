@@ -7,16 +7,19 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Roboto Mono:size=10" };
 static const char dmenufont[]       = "Roboto Mono:size=10";
-/* static const char color1[]       = "#50629a"; // background color of bar */
-/* static const char color2[]       = "#444444"; // unfocused window */
-/* static const char color3[]       = "#eeead9"; */
-/* static const char color4[]       = "#f5e9a8";// focused window and tags */
-/* static const char color5[]       = "#f5e9a8";// focused window and tags */
-static const char color1[]       = "#0b0956"; // background of bar and border of unfocused window
-static const char color2[]       = "#4b0956"; // background of current tag and window name
-static const char color3[]       = "#8f0956"; // Window border focused window
-static const char color4[]       = "#a9ff6c"; // Font for Selected tag and window name
-static const char color5[]       = "#a9c36c"; // Font for tags and status
+
+/* static const char color1[]       = "#0b0956"; // background of bar and border of unfocused window */
+/* static const char color2[]       = "#4b0956"; // background of current tag and window name */
+/* static const char color3[]       = "#8f0956"; // Window border focused window */
+/* static const char color4[]       = "#a9ff6c"; // Font for Selected tag and window name */
+/* static const char color5[]       = "#a9c36c"; // Font for tags and status */
+
+static const char color1[]       = "#3D405B";
+static const char color2[]       = "#81B29A";
+static const char color3[]       = "#e74c3c";
+static const char color4[]       = "#F4F1DE";
+static const char color5[]       = "#E07A5F";
+
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { color5, color1, color1 },
