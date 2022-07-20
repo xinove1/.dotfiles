@@ -1,0 +1,37 @@
+evaluate-commands %sh{
+        plugins="$kak_config/plugins"
+            mkdir -p "$plugins"
+                [ ! -e "$plugins/plug.kak" ] && \
+                        git clone -q https://github.com/andreyorst/plug.kak.git "$plugins/plug.kak"
+                            printf "%s\n" "source '$plugins/plug.kak/rc/plug.kak'"
+}
+plug "andreyorst/plug.kak"
+plug "andreyorst/fzf.kak"
+
+colorscheme gruvbox-dark
+
+#map global user <f> <z> ': fzf-mode<ret>'
+#map global user ff ': w'
+map global normal <space> , -docstring 'leader'
+map global normal <backspace> <space> -docstring 'remove all sels except main'
+map global normal <a-backspace> <a-space> -docstring 'remove main sel'
+
+define-command -docstring "map-sequence <scope> <sequence> <command>: map <sequence> of keys to <command> in insert mode." \
+map-sequence -params 3 %{ evaluate-commands %sh{
+        keys=$(printf "%s" "$2" | sed "s/\([&|]\)/\1\1/g")
+            cmd=$(printf "%s" "$3" | sed "s/\([@&|]\)/\1\1/g")
+                printf "%s\n" "hook -group $2-seq $1 InsertChar ${2##${2%%?}} %|
+                            try %&
+                                            execute-keys -draft h<a-B> <a-k>$keys<ret> s$keys\z<ret> d
+                                                        evaluate-commands %@$cmd@
+                            &
+                |"
+}}
+
+define-command -docstring "unmap-sequence <scope> <sequence>: unmap <sequence> of keys in insert mode." \
+unmap-sequence -params 2 %{
+        remove-hooks "%arg{1}" "%arg{2}-seq"
+}
+
+map-sequence global fs %{': w'}
+map-sequence global time %{echo %sh{date}}

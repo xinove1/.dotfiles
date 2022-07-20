@@ -114,7 +114,6 @@ alias flux="redshift -t 2500k:2500k -b 0.6:0.6 -l -25:-49"
 alias flux2="redshift -t 4500k:4500k -b 0.6:0.6 -l -25:-49"
 alias k="sh ~/Documents/scripts/.keyboard.sh"
 
-eval $(thefuck --alias)
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/.doom/bin
 export LEDGER_FILE=~/stuff/Notas/2021.journal

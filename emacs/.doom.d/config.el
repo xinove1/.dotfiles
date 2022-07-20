@@ -113,6 +113,7 @@
        ;(shell-command "setxkbmap us -variant colemak_dh")))
        (shell-command "setxkbmap dvorak")))
 (eq major-mode "vterm-mode")
+
 ;(setq tmp default-directory)
 ;(setq default-directory "~/")
 ;(shell-command "setxkbmap br")
@@ -245,7 +246,13 @@
          :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
 
 (map! :leader
-      :desc "vterm" "?" #'vterm)
+      :desc "vterm" "?" #'vterm
+      (:prefix-map ("f" . "file")
+        :desc "42header current file" "h" #'42header
+        :desc "42header current file" "H" #'42header
+        ;:desc "42header all c files current dir" "H" #'42header-all))
+        ))
+
 
 (map! :leader
       (:prefix-map ("n" . "Org roam")
@@ -335,19 +342,19 @@
 ;;   (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
 ;;   (set-lsp-priority! 'ccls 2)) ; optional as ccls is the default in Doom
 
-(setq lsp-clients-clangd-args '("-j=3"
-                                "--background-index"
-                                "--clang-tidy"
-                                "--completion-style=detailed"
-                                "--header-insertion=never"
-                                "--header-insertion-decorators=0"))
+;; (setq lsp-clients-clangd-args '("-j=3"
+;;                                 "--background-index"
+;;                                 "--clang-tidy"
+;;                                 "--completion-style=detailed"
+;;                                 "--header-insertion=never"
+;;                                 "--header-insertion-decorators=0"))
 (after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
 
 ;(load "~/.doom.d/lisp/header.el")
 
 (add-hook 'window-setup-hook (lambda () (find-file "~/stuff/Notas/roam/20210913110509-home.org")))
-(add-hook 'window-setup-hook #'doom/quickload-session)
+;(add-hook 'window-setup-hook #'doom/quickload-session)
 
 (setq ranger-show-hidden t)
 
@@ -357,3 +364,12 @@
   (setq projectile-project-root-files-bottom-up '(".projectile" ".project"))
   (setq projectile-project-root-files-top-down-recurring '( ".projectile" ".project")))
 
+(defun 42header-all ()
+  (interactive)
+  (shell-command "nvim -c \'argdo Stdheader\'  -c \'wa\' -c \'q\' *.c")
+  (revert-buffer :ignore-auto :noconfirm))
+
+(defun 42header ()
+  (interactive)
+  (shell-command (concat "nvim -c \'argdo Stdheader\'  -c \'wa\' -c \'q\' " (buffer-file-name)))
+  (revert-buffer :ignore-auto :noconfirm))

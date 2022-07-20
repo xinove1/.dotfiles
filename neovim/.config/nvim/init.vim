@@ -25,7 +25,7 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'gruvbox-community/gruvbox'
 call plug#end()
 
-colorscheme gruvbox
+"colorscheme gruvbox
 
 let mapleader = " "
 nnoremap <leader>ww <C-Space>
