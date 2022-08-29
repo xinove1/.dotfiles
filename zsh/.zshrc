@@ -117,6 +117,7 @@ alias k="sh ~/Documents/scripts/.keyboard.sh"
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/.doom/bin
 export LEDGER_FILE=~/stuff/Notas/2021.journal
-export HEADER42_LOGIN=nthomas-
-export HEADER42_MAIL=nthomas-@student.42sp.org.br
+export USER=nthomas-
+export MAIL=nthomas-@student.42sp.org.br
+export DEBUGINFOD_URLS="https://debuginfod.archlinux.org"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

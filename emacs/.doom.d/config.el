@@ -148,10 +148,10 @@
 (defun pretty()
   (let* ((variable-tuple
           (cond
-           ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+           ((x-list-fonts "Roboto Mono")     '(:font "Roboto Mono"))
+           ;;((x-list-fonts "ETBembo")         '(:font "ETBembo"))
            (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))
            ((x-list-fonts "Iosevka")         '(:font "Iosevka"))
-           ((x-list-fonts "Roboto Mono")     '(:font "Roboto Mono"))
            ((x-list-fonts "JetBrains Mono")  '(:font "JetBrains Mono"))
            ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
            ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))

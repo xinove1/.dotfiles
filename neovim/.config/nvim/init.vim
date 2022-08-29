@@ -18,12 +18,12 @@ set shiftwidth=4
 set expandtab
 set smartindent
 
-call plug#begin('~/.vim/plugged')
-Plug 'nvim-lua/plenary.nvim'
-Plug '42Paris/42header/vim/stdheader.vim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'gruvbox-community/gruvbox'
-call plug#end()
+#call plug#begin('~/.vim/plugged')
+#Plug 'nvim-lua/plenary.nvim'
+#Plug '42Paris/42header/vim/stdheader.vim'
+#Plug 'nvim-telescope/telescope.nvim'
+#Plug 'gruvbox-community/gruvbox'
+#call plug#end()
 
 "colorscheme gruvbox
 
@@ -35,6 +35,8 @@ nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+let g:user42 = 'nthomas-'
+let g:mail42 = 'nthomas-@student.42sp.org.br'
 let s:asciiart = [
 			\"        :::      ::::::::",
 			\"      :+:      :+:    :+:",
@@ -116,7 +118,7 @@ function! s:line(n)
 endfunction
 
 function! s:user()
-	let l:user = $USER
+	let l:user = "nthomas-"
 	if strlen(l:user) == 0
 		let l:user = "marvin"
 	endif
@@ -124,7 +126,7 @@ function! s:user()
 endfunction
 
 function! s:mail()
-	let l:mail = $MAIL
+	let l:mail = "nthomas-@student.42sp.org.br"
 	if strlen(l:mail) == 0
 		let l:mail = "marvin@42.fr"
 	endif
