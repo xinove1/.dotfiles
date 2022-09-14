@@ -34,7 +34,7 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-;(setq display-line-numbers-type t)
+;(setq display-line-numbers-type 'relative)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -93,7 +93,7 @@
 
 (setq org-directory "~/stuff/Notas")
 
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 (with-eval-after-load 'evil
     (defalias #'forward-evil-word #'forward-evil-symbol)
@@ -348,8 +348,42 @@
 ;;                                 "--completion-style=detailed"
 ;;                                 "--header-insertion=never"
 ;;                                 "--header-insertion-decorators=0"))
+;;
 (after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
+;; debug stuff (dap-mode)
+;; (setq dap-auto-configure-mode t)
+;; (require 'dap-lldb)
+(map! :map dap-mode-map
+      :leader
+      :prefix ("d" . "dap")
+      ;; basics
+      :desc "dap next"          "n" #'dap-next
+      :desc "dap step in"       "i" #'dap-step-in
+      :desc "dap step out"      "o" #'dap-step-out
+      :desc "dap continue"      "c" #'dap-continue
+      :desc "dap hydra"         "h" #'dap-hydra
+      :desc "dap debug restart" "r" #'dap-debug-restart
+      :desc "dap debug"         "s" #'dap-debug
+
+      ;; debug
+      :prefix ("dd" . "Debug")
+      :desc "dap debug recent"  "r" #'dap-debug-recent
+      :desc "dap debug last"    "l" #'dap-debug-last
+
+      ;; eval
+      :prefix ("de" . "Eval")
+      :desc "eval"                "e" #'dap-eval
+      :desc "eval region"         "r" #'dap-eval-region
+      :desc "eval thing at point" "s" #'dap-eval-thing-at-point
+      :desc "add expression"      "a" #'dap-ui-expressions-add
+      :desc "remove expression"   "d" #'dap-ui-expressions-remove
+
+      :prefix ("db" . "Breakpoint")
+      :desc "dap breakpoint toggle"      "b" #'dap-breakpoint-toggle
+      :desc "dap breakpoint condition"   "c" #'dap-breakpoint-condition
+      :desc "dap breakpoint hit count"   "h" #'dap-breakpoint-hit-condition
+      :desc "dap breakpoint log message" "l" #'dap-breakpoint-log-message)
 
 ;(load "~/.doom.d/lisp/header.el")
 
@@ -373,3 +407,4 @@
   (interactive)
   (shell-command (concat "nvim -c \'argdo Stdheader\'  -c \'wa\' -c \'q\' " (buffer-file-name)))
   (revert-buffer :ignore-auto :noconfirm))
+
