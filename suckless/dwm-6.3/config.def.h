@@ -29,7 +29,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = {"/=\\", "Doom", "wWw", "Discord", "5", "6", "7", "8", "8"};
+static const char *tags[] = {"⟬𓃸⟭", "Doom", "wWw", "Discord", "Godot", "6", "7", "8", "8"};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -61,7 +61,8 @@ static const Layout layouts[] = {
 	{ MODKEY,                       CHAIN,    KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           CHAIN,    KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ShiftMask,             CHAIN,    KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, CHAIN,    KEY,      toggletag,      {.ui = 1 << TAG} },
+	{ MODKEY|ControlMask|ShiftMask, CHAIN,    KEY,      toggletag,      {.ui = 1 << TAG} }, \
+	//{ MOD2KEY|ShiftMask,            CHAIN,    KEY,      toggletag,      {.i = +1, .ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -101,10 +102,14 @@ static Key keys[] = {
 	//{ MODKEY|ShiftMask,             -1,         XK_space,  togglefloating, {0} },
 
     // Screen movement and manipulation
+	{ MODKEY,                       -1,         XK_e,      focusmon,       {.i = -1 } },
+	{ MODKEY,                       -1,         XK_q,      focusmon,       {.i = +1 } },
 	{ MODKEY,                       -1,         XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       -1,         XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             -1,         XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             -1,         XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY|ShiftMask,             -1,         XK_e,      tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,             -1,         XK_q,      tagmon,         {.i = +1 } },
 
     // Tag movement and manipulation
 	{ MODKEY,                       -1,         XK_0,      view,           {.ui = ~0 } },
@@ -117,6 +122,11 @@ static Key keys[] = {
 	TAGKEYS(                        XK_w,       XK_j,                      1)
 	TAGKEYS(                        XK_w,       XK_k,                      2)
 	TAGKEYS(                        XK_w,       XK_l,                      3)
+	TAGKEYS(                        XK_w,       XK_u,                      4)
+	TAGKEYS(                        XK_w,       XK_i,                      5)
+	TAGKEYS(                        XK_w,       XK_o,                      6)
+	TAGKEYS(                        XK_w,       XK_n,                      7)
+	TAGKEYS(                        XK_w,       XK_m,                      8)
 	TAGKEYS(                        -1,         XK_1,                      0)
 	TAGKEYS(                        -1,         XK_2,                      1)
 	TAGKEYS(                        -1,         XK_3,                      2)
