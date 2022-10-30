@@ -7,3 +7,5 @@ if [ "$BR" = "$(setxkbmap -query | grep layout)" ]; then
 else
     setxkbmap br
 fi
+setxkbmap -option caps:swapescape
+setxkbmap -option escape:swapcaps
