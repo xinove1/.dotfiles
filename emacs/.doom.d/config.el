@@ -81,15 +81,20 @@
 ;(setq doom-font (font-spec :family "Hack" :size 13.0))
 ;(setq doom-font (font-spec :family "JetBrains Mono" :size 13.0))
 ;(setq doom-font (font-spec :family "Mononoki Nerd Font" :size 13.0))
+;(setq doom-font (font-spec :family "TamzenForPowerline" :size 20.0))
+;(setq doom-font (font-spec :family "trigon8x15r"))
+;(setq doom-font (font-spec :family "Tamsyn" ))
 
-(setq doom-font (seq-random-elt '("JetBrains Mono-13"
-                                 "Mononoki Nerd Font-13"
-                                 "Roboto Mono-13"
-                                 "Hack-13"
-                                 "Iosevka Term-13")))
+(setq doom-font (seq-random-elt '(
+                                "JetBrains Mono-13"
+                                "Mononoki Nerd Font-13"
+                                "Roboto Mono-13"
+                                "Hack-13"
+                                "Iosevka Term-13"
+                                "TamzenForPowerline-15")))
 
 (setq doom-theme (seq-random-elt '(doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge
-                                   doom-molokai doom-monokai-pro doom-old-hope doom-gruvbox)))
+                                   doom-molokai doom-monokai-pro doom-old-hope doom-gruvbox old-rice-putin)))
 
 (setq org-directory "~/stuff/Notas")
 
@@ -226,7 +231,7 @@
 )
 (setq org-ellipsis " ,,,")
 ;(add-hook 'org-mode-hook 'setup-org)
-(add-hook 'org-mode-hook 'pretty)
+;(add-hook 'org-mode-hook 'pretty)
 
 ;; (use-package org-roam
 ;;   :ensure t
