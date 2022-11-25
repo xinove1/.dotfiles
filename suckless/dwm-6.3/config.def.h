@@ -1,12 +1,12 @@
-// -*- compile-command: "cc program.c && ./program"; -*-
+// -*- compile-command: "sudo make install"; -*-
 //* See LICENSE file for copyright and license details. */
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Roboto Mono:size=10" };
-static const char dmenufont[]       = "Roboto Mono:size=10";
+static const char *fonts[]          = { "Tamzen:size=13" };
+static const char dmenufont[]       = "Tamzen:size=13";
 
 /* static const char color1[]       = "#0b0956"; // background of bar and border of unfocused window */
 /* static const char color2[]       = "#4b0956"; // background of current tag and window name */
@@ -14,11 +14,18 @@ static const char dmenufont[]       = "Roboto Mono:size=10";
 /* static const char color4[]       = "#a9ff6c"; // Font for Selected tag and window name */
 /* static const char color5[]       = "#a9c36c"; // Font for tags and status */
 
-static const char color1[]       = "#3D405B";
-static const char color2[]       = "#81B29A";
-static const char color3[]       = "#e74c3c";
-static const char color4[]       = "#F4F1DE";
-static const char color5[]       = "#E07A5F";
+// Old rice putin
+static const char color1[]       = "#1f1d1b";
+static const char color2[]       = "#181512";
+static const char color3[]       = "#A3535E";
+static const char color4[]       = "#C94539";
+static const char color5[]       = "#DAB733";
+
+/* static const char color1[]       = "#3D405B"; */
+/* static const char color2[]       = "#81B29A"; */
+/* static const char color3[]       = "#e74c3c"; */
+/* static const char color4[]       = "#F4F1DE"; */
+/* static const char color5[]       = "#E07A5F"; */
 
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
@@ -29,7 +36,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = {"⟬𓃸⟭", "Doom", "wWw", "Discord", "Godot", "6", "7", "8", "8"};
+static const char *tags[] = {"Term", "Doom", "wWw", "Discord", "Godot", "6", "7", "8", "8"};
 
 static const Rule rules[] = {
 	/* xprop(1):
