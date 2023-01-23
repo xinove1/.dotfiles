@@ -111,23 +111,27 @@
 (setq-hook! '(c-mode-hook c++-mode-hook) indent-tabs-mode t)
 ;(setq rtags-path "~/Documents/rtags/bin")
 
-;; Dvorak only in insert mode
-(defun change-kbd-dvorak()
-  (if (or (eq major-mode 'shell-mode ) (eq major-mode 'vterm-mode ))
-       (shell-command "setxkbmap br")
-       ;(shell-command "setxkbmap us -variant colemak_dh")))
-       (shell-command "setxkbmap dvorak")))
-(eq major-mode "vterm-mode")
 
+
+;; (defun change-kbd-dvorak()
+;;   (if (or (eq major-mode 'shell-mode ) (eq major-mode 'vterm-mode ))
+;;        (shell-command "setxkbmap br")
+;;        ;(shell-command "setxkbmap us -variant colemak_dh")))
+;;        (shell-command "setxkbmap dvorak")))
+
+;; I guess this was from tramp shenaniggans
 ;(setq tmp default-directory)
 ;(setq default-directory "~/")
 ;(shell-command "setxkbmap br")
 ;(setq default-directory tmp)
 
+;; Vterm shell
+(setq! vterm-shell "/bin/zsh")
+
+(defun change-kbd-dvorak()
+  (shell-command "setxkbmap dvorak"))
 (defun change-kbd-br()
-  (if (not (or (eq major-mode 'shell-mode ) (eq major-mode 'vterm-mode )))
-       (shell-command "setxkbmap br")
-       (shell-command "setxkbmap br")))
+  (shell-command "setxkbmap br"))
 
 (add-hook 'evil-insert-state-entry-hook 'change-kbd-dvorak)
 (add-hook 'evil-insert-state-exit-hook 'change-kbd-br)
@@ -347,14 +351,15 @@
 ;;   (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
 ;;   (set-lsp-priority! 'ccls 2)) ; optional as ccls is the default in Doom
 
-;; (setq lsp-clients-clangd-args '("-j=3"
-;;                                 "--background-index"
-;;                                 "--clang-tidy"
-;;                                 "--completion-style=detailed"
-;;                                 "--header-insertion=never"
-;;                                 "--header-insertion-decorators=0"))
-;;
-(after! lsp-clangd (set-lsp-priority! 'clangd 2))
+(after! lsp-clangd
+  (setq lsp-clients-clangd-args
+        '("-j=3"
+          "--background-index"
+          "--clang-tidy"
+          "--completion-style=detailed"
+          "--header-insertion=never"
+          "--header-insertion-decorators=0"))
+  (set-lsp-priority! 'clangd 2))
 
 ;; debug stuff (dap-mode)
 ;; (setq dap-auto-configure-mode t)
@@ -392,7 +397,7 @@
 
 ;(load "~/.doom.d/lisp/header.el")
 
-(add-hook 'window-setup-hook (lambda () (find-file "~/stuff/Notas/roam/20210913110509-home.org")))
+;(add-hook 'window-setup-hook (lambda () (find-file "~/stuff/Notas/roam/20210913110509-home.org")))
 ;(add-hook 'window-setup-hook #'doom/quickload-session)
 
 (setq ranger-show-hidden t)
