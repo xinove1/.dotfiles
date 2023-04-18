@@ -93,7 +93,7 @@
                                 "Iosevka Term-13"
                                 "TamzenForPowerline-15")))
 
-(setq doom-theme (seq-random-elt '(doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge
+(setq doom-theme (seq-random-elt '(doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge modus-vivendi modus-vivendi-tinted
                                    doom-molokai doom-monokai-pro doom-old-hope doom-gruvbox old-rice-putin)))
 
 (setq org-directory "~/stuff/Notas")
@@ -128,13 +128,8 @@
 ;; Vterm shell
 (setq! vterm-shell "/bin/zsh")
 
-(defun change-kbd-dvorak()
-  (shell-command "setxkbmap dvorak"))
-(defun change-kbd-br()
-  (shell-command "setxkbmap br"))
-
-(add-hook 'evil-insert-state-entry-hook 'change-kbd-dvorak)
-(add-hook 'evil-insert-state-exit-hook 'change-kbd-br)
+(add-hook! 'evil-insert-state-entry-hook (shell-command "setxkbmap dvorak"))
+(add-hook! 'evil-insert-state-exit-hook (shell-command "setxkbmap br"))
 
 ;; config org pomodoro sons 😏
 (setq org-pomodoro-finished-sound "~/Music/dogdoin.wav")
@@ -257,75 +252,79 @@
 (map! :leader
       :desc "vterm" "?" #'vterm
       (:prefix-map ("f" . "file")
-        :desc "42header current file" "h" #'42header
-        :desc "42header current file" "H" #'42header
-        ;:desc "42header all c files current dir" "H" #'42header-all))
-        ))
+       :desc "42header current file" "h" #'42header
+       :desc "42header current file" "H" #'42header
+                                        ;:desc "42header all c files current dir" "H" #'42header-all))
+       ))
 
+(map! :map doom-leader-workspace-map
+      :desc "Switch workspace" "h" #'+workspace/switch-to-0
+      :desc "Switch workspace" "j" #'+workspace/switch-to-1
+      :desc "Switch workspace" "k" #'+workspace/switch-to-2
+      :desc "Switch workspace" "l" #'+workspace/switch-to-3
+      :desc "Switch workspace" "TAB" #'+workspace/switch-to
+      )
 
 (map! :leader
-      (:prefix-map ("n" . "Org roam")
-        :desc "Node find" "f" #'org-roam-node-find
-        :desc "Node insert" "i" #'org-roam-node-insert
-        :desc "Node immediate insert" "I" #'org-roam-node-insert-immediate
-        :desc "Buffer toggle" "l" #'org-roam-buffer-toggle
-        :desc "Org capture finalize" "s" #'org-capture-finalize
-        ;; Bindings from doom, activate as needed
-        ;; :desc "Open random node"           "a" #'org-roam-node-random
-        ;; :desc "Find node"                  "f" #'org-roam-node-find
-        ;; :desc "Find ref"                   "F" #'org-roam-ref-find
-        ;; :desc "Show graph"                 "g" #'org-roam-graph
-        ;; :desc "Insert node"                "i" #'org-roam-node-insert
-        ;; :desc "Capture to node"            "n" #'org-roam-capture
-        :desc "Toggle roam buffer"         "r" #'org-roam-buffer-toggle
-        :desc "Launch roam buffer"         "R" #'org-roam-buffer-display-dedicated
-        :desc "Todo list"                    "t" #'org-todo-list
-        :desc "Calendar"                      "c" #'=calendar
-        :desc "Pomodoro"                      "p" #'org-pomodoro
+      (:prefix-map ("j" . "tobas bindings")
+       :desc "Comment region"          "c" #'comment-region
+       :desc "Uncomment region"        "u" #'uncomment-region
+       :desc "Format region"           "f" #'+format/region-or-buffer
+      ))
 
-        ;; :desc "42 header"                     "h" #'header-insert
-        ;; :desc "Sync database"              "s" #'org-roam-db-sync
-         (:prefix ("d" . "by date")
-           :desc "Goto previous note"        "b" #'org-roam-dailies-goto-previous-note
-           :desc "Goto date"                 "d" #'org-roam-dailies-goto-date
-           :desc "Capture date"              "D" #'org-roam-dailies-capture-date
-           :desc "Goto next note"            "f" #'org-roam-dailies-goto-next-note
-           :desc "Goto tomorrow"             "m" #'org-roam-dailies-goto-tomorrow
-           :desc "Capture tomorrow"          "M" #'org-roam-dailies-capture-tomorrow
-           :desc "Capture today"             "n" #'org-roam-dailies-capture-today
-           :desc "Goto today"                "t" #'org-roam-dailies-goto-today
-           :desc "Capture today"             "T" #'org-roam-dailies-capture-today
-           :desc "Goto yesterday"            "y" #'org-roam-dailies-goto-yesterday
-           :desc "Capture yesterday"         "Y" #'org-roam-dailies-capture-yesterday
-           :desc "Find directory"            "-" #'org-roam-dailies-find-directory)
-        ;;old notes bindins
-        (:prefix-map ("n" . "notes")
-         :desc "Search notes for symbol"      "*" #'+default/search-notes-for-symbol-at-point
-         :desc "Org agenda"                   "a" #'org-agenda
-         (:when (featurep! :tools biblio)
+(map! :leader
+      (:prefix-map ("n" . "Notes")
+       :desc "Node find"               "f" #'org-roam-node-find
+       :desc "Node insert"             "i" #'org-roam-node-insert
+       :desc "Node immediate insert"   "I" #'org-roam-node-insert-immediate
+       :desc "Buffer toggle"           "l" #'org-roam-buffer-toggle
+       :desc "Org capture finalize"    "s" #'org-capture-finalize
+       :desc "Toggle roam buffer"      "r" #'org-roam-buffer-toggle
+       :desc "Launch roam buffer"      "R" #'org-roam-buffer-display-dedicated
+       :desc "Todo list"               "t" #'my/org-todo-list
+       :desc "Calendar"                "c" #'=calendar
+       :desc "Pomodoro"                "p" #'org-pomodoro
+       ;; :desc "Sync database"              "s" #'org-roam-db-sync
+       (:prefix ("d" . "by date")
+        :desc "Goto previous note"        "b" #'org-roam-dailies-goto-previous-note
+        :desc "Goto date"                 "d" #'org-roam-dailies-goto-date
+        :desc "Capture date"              "D" #'org-roam-dailies-capture-date
+        :desc "Goto next note"            "f" #'org-roam-dailies-goto-next-note
+        :desc "Goto tomorrow"             "m" #'org-roam-dailies-goto-tomorrow
+        :desc "Capture tomorrow"          "M" #'org-roam-dailies-capture-tomorrow
+        :desc "Capture today"             "n" #'org-roam-dailies-capture-today
+        :desc "Goto today"                "t" #'org-roam-dailies-goto-today
+        :desc "Capture today"             "T" #'org-roam-dailies-capture-today
+        :desc "Goto yesterday"            "y" #'org-roam-dailies-goto-yesterday
+        :desc "Capture yesterday"         "Y" #'org-roam-dailies-capture-yesterday
+        :desc "Find directory"            "-" #'org-roam-dailies-find-directory)
+       ;;old notes bindins
+       (:prefix-map ("N" . "notes")
+        :desc "Search notes for symbol"      "*" #'+default/search-notes-for-symbol-at-point
+        :desc "Org agenda"                   "a" #'org-agenda
+        (:when (featurep! :tools biblio)
           :desc "Bibliographic entries"        "b"
           (cond ((featurep! :completion vertico)  #'bibtex-actions-open-entry)
                 ((featurep! :completion ivy)      #'ivy-bibtex)
                 ((featurep! :completion helm)     #'helm-bibtex)))
-         :desc "Toggle last org-clock"        "c" #'+org/toggle-last-clock
-         :desc "Cancel current org-clock"     "C" #'org-clock-cancel
-         :desc "Open deft"                    "d" #'deft
-         (:when (featurep! :lang org +noter)
+        :desc "Toggle last org-clock"        "c" #'+org/toggle-last-clock
+        :desc "Cancel current org-clock"     "C" #'org-clock-cancel
+        :desc "Open deft"                    "d" #'deft
+        (:when (featurep! :lang org +noter)
           :desc "Org noter"                  "e" #'org-noter)
-         :desc "Find file in notes"           "f" #'+default/find-in-notes
-         :desc "Browse notes"                 "F" #'+default/browse-notes
-         :desc "Org store link"               "l" #'org-store-link
-         :desc "Tags search"                  "m" #'org-tags-view
-         :desc "Org capture"                  "n" #'org-capture
-         :desc "Goto capture"                 "N" #'org-capture-goto-target
-         :desc "Active org-clock"             "o" #'org-clock-goto
-         :desc "Todo list"                    "t" #'org-todo-list
-         :desc "Search notes"                 "s" #'+default/org-notes-search
-         :desc "Search org agenda headlines"  "S" #'+default/org-notes-headlines
-         :desc "View search"                  "v" #'org-search-view
-         :desc "Org export to clipboard"        "y" #'+org/export-to-clipboard
-         :desc "Org export to clipboard as RTF" "Y" #'+org/export-to-clipboard-as-rich-text)))
-
+        :desc "Find file in notes"           "f" #'+default/find-in-notes
+        :desc "Browse notes"                 "F" #'+default/browse-notes
+        :desc "Org store link"               "l" #'org-store-link
+        :desc "Tags search"                  "m" #'org-tags-view
+        :desc "Org capture"                  "n" #'org-capture
+        :desc "Goto capture"                 "N" #'org-capture-goto-target
+        :desc "Active org-clock"             "o" #'org-clock-goto
+        :desc "Todo list"                    "t" #'org-todo-list
+        :desc "Search notes"                 "s" #'+default/org-notes-search
+        :desc "Search org agenda headlines"  "S" #'+default/org-notes-headlines
+        :desc "View search"                  "v" #'org-search-view
+        :desc "Org export to clipboard"        "y" #'+org/export-to-clipboard
+        :desc "Org export to clipboard as RTF" "Y" #'+org/export-to-clipboard-as-rich-text)))
 (use-package! websocket
     :after org-roam)
 
@@ -364,6 +363,7 @@
 ;; debug stuff (dap-mode)
 ;; (setq dap-auto-configure-mode t)
 ;; (require 'dap-lldb)
+
 (map! :map dap-mode-map
       :leader
       :prefix ("d" . "dap")
@@ -395,18 +395,34 @@
       :desc "dap breakpoint hit count"   "h" #'dap-breakpoint-hit-condition
       :desc "dap breakpoint log message" "l" #'dap-breakpoint-log-message)
 
+(map!
+ :after rustic
+ :map rustic-mode-map
+ :localleader
+ :desc "Cargo run"           "r" #'rustic-cargo-run
+ :desc "Cargo test"          "t" #'rustic-cargo-test
+ :desc "Cargo current test"  "T" #'rustic-cargo-current-test
+ )
 ;(load "~/.doom.d/lisp/header.el")
 
 ;(add-hook 'window-setup-hook (lambda () (find-file "~/stuff/Notas/roam/20210913110509-home.org")))
 ;(add-hook 'window-setup-hook #'doom/quickload-session)
 
+
+(defun ranger-hook-config ()
+  (setq display-line-numbers-mode t)
+  (setq display-line-numbers 'relative))
+
 (setq ranger-show-hidden t)
+(add-hook! 'ranger-mode-hook (ranger-hook-config))
 
 (after! org-roam (load! "org_roam_custom.el"))
 
-(after! projectile
-  (setq projectile-project-root-files-bottom-up '(".projectile" ".project"))
-  (setq projectile-project-root-files-top-down-recurring '( ".projectile" ".project")))
+(load! "themes/modus-themes.el")
+
+;; (after! projectile
+;;   (setq projectile-project-root-files-bottom-up '(".projectile" ".project"))
+;;   (setq projectile-project-root-files-top-down-recurring '( ".projectile" ".project")))
 
 (defun 42header-all ()
   (interactive)
@@ -417,4 +433,3 @@
   (interactive)
   (shell-command (concat "nvim -c \'argdo Stdheader\'  -c \'wa\' -c \'q\' " (buffer-file-name)))
   (revert-buffer :ignore-auto :noconfirm))
-

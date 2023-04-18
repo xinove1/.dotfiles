@@ -1,5 +1,9 @@
 ;;;  -*- lexical-binding: t; -*-
 
+(defun my/org-todo-list ()
+  (interactive)
+  (org-todo-list "TODO"))
+
 (defun org-roam-node-insert-immediate (arg &rest args)
   (interactive "P")
   (let ((args (push arg args))
@@ -19,7 +23,7 @@
 
 (defun my/org-roam-refresh-agenda-list ()
   (interactive)
-  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
+  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Agenda")))
 
 ;; Build the agenda list the first time for the session
 (my/org-roam-refresh-agenda-list)
@@ -54,7 +58,7 @@ capture was not aborted."
   (interactive)
   (org-roam-capture- :node (org-roam-node-create)
                      :templates '(("i" "inbox" plain "* %?"
-                                  :if-new (file+head "Inbox.org" "#+title: Inbox\n")))))
+                                   :if-new (file+head "Inbox.org" "#+title: Inbox\n")))))
 
 (defun my/org-roam-capture-task ()
   (interactive)
@@ -74,8 +78,8 @@ capture was not aborted."
   (interactive)
   (let ((org-refile-keep t) ;; Set this to nil to delete the original!
         (org-roam-dailies-capture-templates
-          '(("t" "tasks" entry "%?"
-             :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
+         '(("t" "tasks" entry "%?"
+            :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
         (org-after-refile-insert-hook #'save-buffer)
         today-file
         pos)

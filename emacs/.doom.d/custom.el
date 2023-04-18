@@ -31,3 +31,15 @@
 ;;  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
 ;;  '(org-todo-keyword-active ((t (:inherit default :weight bold :foreground "#FFFFFF" :font "ETBembo" :height 0.35))))
 ;;  '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(warning-suppress-log-types '((lsp-mode) (defvaralias))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
