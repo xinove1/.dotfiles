@@ -51,4 +51,5 @@
 
 ;(package! org-superstar)
 (package! websocket)
+(package! evil-escape :disable t)
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
