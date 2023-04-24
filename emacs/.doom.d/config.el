@@ -82,6 +82,7 @@
 ;; Vterm shell
 (setq! vterm-shell "/bin/zsh")
 
+;; TODO Maybe turn back to func and add-hook
 (add-hook! 'evil-insert-state-entry-hook (shell-command "setxkbmap dvorak"))
 (add-hook! 'evil-insert-state-exit-hook (shell-command "setxkbmap br"))
 
@@ -233,16 +234,26 @@
 ;;   :after '(evil-window-split evil-window-vsplit)
 ;;   (consult-buffer))
 
-;; TODO maybe add after to fix the vterm one
 (set-popup-rules!
   '(("^\\*cargo" :side right
      :size 80
-     :select t)
-    ("^\\*vterm" :side right
-     :size 80
      :select t)))
+
+;; (add-hook 'window-setup-hook
+;;   (set-popup-rule!
+;;     '("^\\*vterm*" :side right
+;;        :size 80
+;;        :select t)))
 
 (after! 'evil
   (evil-set-initial-state 'vterm-mode 'insert))
 
 (add-hook! 'vterm-exit-functions (shell-command "setxkbmap br"))
+
+(setq org-agenda-custom-commands
+      '(("v" "A better agenda view"
+         ((tags "PRIORITY=\"A\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "High-priority unfinished tasks:")))
+          (agenda "")
+          (alltodo "")))))
