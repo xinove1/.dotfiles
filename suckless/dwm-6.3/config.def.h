@@ -5,8 +5,8 @@ static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Tamzen:size=13" };
-static const char dmenufont[]       = "Tamzen:size=13";
+static const char *fonts[]          = { "Roboto Mono:size=11" };
+static const char dmenufont[]       = "Roboto Mono:size=11";
 
 /* static const char color1[]       = "#0b0956"; // background of bar and border of unfocused window */
 /* static const char color2[]       = "#4b0956"; // background of current tag and window name */
@@ -45,6 +45,9 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+	{ "Emacs",     NULL,     "Todos",     0,            1,           -1 },
+	{ "Emacs",     NULL,     "Scratch",   0,            1,           -1 },
+	{ "Emacs",     NULL,     "Agenda",    0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       4,            0,           -1 },
 	//{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
@@ -65,6 +68,7 @@ static const Layout layouts[] = {
 /* key definitions */
 #define MODKEY Mod1Mask
 #define MOD2KEY Mod4Mask
+#define MOD3KEY Mod5Mask
 #define TAGKEYS(CHAIN,KEY,TAG) \
 	{ MODKEY,                       CHAIN,    KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           CHAIN,    KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -86,11 +90,18 @@ static Key keys[] = {
 	{ MODKEY,                       -1,         XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       -1,         XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_o,       XK_m,      spawn,          SHCMD("emacsclient -c -a 'emacs'") },
+	{ MODKEY,                       -1,         XK_s,      spawn,          SHCMD("emacsclient -n -e '(yequake-toggle \"Scratch\")'") },
+	{ MODKEY,                       -1,         XK_t,      spawn,          SHCMD("emacsclient -n -e '(yequake-toggle \"Todos\")'") },
+	{ MODKEY,                       -1,         XK_a,      spawn,          SHCMD("emacsclient -n -e '(yequake-toggle \"Agenda\")'") },
 	{ MODKEY,                       XK_o,       XK_r,      spawn,          SHCMD("emacsclient -c -a 'emacs' --eval '(ranger)'") },
 	{ MODKEY,                       XK_o,       XK_b,      spawn,          SHCMD("firefox") },
 	{ MODKEY,                       XK_o,       XK_d,      spawn,          SHCMD("discord") },
 	{ MOD2KEY,                      -1,         XK_space,  spawn,          SHCMD("~/Documents/scripts/change_layout.sh") },
 	{ MOD2KEY|ShiftMask,            -1,         XK_s,      spawn,          SHCMD("flameshot gui") },
+	{ MOD3KEY,                      -1,         XK_i,      spawn,          SHCMD("~/Documents/scripts/change_layout.sh && xdotool key i") },
+	{ MOD3KEY|ShiftMask,            -1,         XK_i,      spawn,          SHCMD("xdotool key I && ~/Documents/scripts/change_layout.sh") },
+	{ MOD3KEY,                      -1,         XK_a,      spawn,          SHCMD("xdotool key a && ~/Documents/scripts/change_layout.sh") },
+	{ MOD3KEY|ShiftMask,            -1,         XK_a,      spawn,          SHCMD("xdotool key A && ~/Documents/scripts/change_layout.sh") },
 
     // Layout/Window movement and manipulation
 	//{ MODKEY,                       -1,         XK_b,      togglebar,      {0} },
@@ -103,10 +114,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             -1,         XK_Return, zoom,           {0} },
 	{ MODKEY,                       -1,         XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             -1,         XK_c,      killclient,     {0} },
-	{ MODKEY,                       -1,         XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       -1,         XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY|ShiftMask,             -1,         XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY|ShiftMask,             -1,         XK_space,  setlayout,      {0} },
+	{ MODKEY,                       XK_l,         XK_t,      setlayout,      {.v = &layouts[0]} }, // tiling
+	{ MODKEY,                       XK_l,         XK_f,      setlayout,      {.v = &layouts[2]} }, //Monocle
+	{ MODKEY,                       XK_l,         XK_m,      setlayout,      {.v = &layouts[1]} }, //Float
+	{ MODKEY,                       XK_l,         XK_space,  setlayout,      {0} },
 	//{ MODKEY|ShiftMask,             -1,         XK_space,  togglefloating, {0} },
 
     // Screen movement and manipulation
@@ -167,4 +178,3 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-

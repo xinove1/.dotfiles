@@ -83,13 +83,25 @@
 (setq! vterm-shell "/bin/zsh")
 
 ;; TODO Maybe turn back to func and add-hook
-(add-hook! 'evil-insert-state-entry-hook (shell-command "setxkbmap dvorak"))
-(add-hook! 'evil-insert-state-exit-hook (shell-command "setxkbmap br"))
+
+(defun t/change-kbd-layout (layout)
+  "Runs (shell-command \"setxkbmap <layout>\""
+  (shell-command (concat "setxkbmap " layout)))
+
+(add-hook! 'evil-insert-state-entry-hook (t/change-kbd-layout "dvorak"))
+(add-hook! 'evil-insert-state-exit-hook (t/change-kbd-layout "br"))
 
 ;; config org pomodoro sons 😏
 (setq org-pomodoro-finished-sound "~/Music/dogdoin.wav")
 (setq org-pomodoro-short-break-sound "~/Music/fart.wav")
 ;; (setq org-pomodoro-finished-sound-args)
+
+(with-eval-after-load 'org
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "DO(T)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
+          (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
+          (sequence "|" "OKAY(o)" "YES(y)" "NO(n)"))))
+
 
 (setq-default org-display-custom-times t)
 (setq org-time-stamp-custom-formats '("<%A %e %b %Y>" . "<%A %e %b %Y %H:%M>"))
@@ -101,6 +113,8 @@
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq fancy-splash-image (seq-random-elt '("~/Documents/imagens/snail2.png" "~/Documents/imagens/dardo2.png" "~/Documents/imagens/frutacomun.png" "~/Documents/imagens/sapo.png" "~/Documents/imagens/sapo2.png" "~/Documents/imagens/cafe2.png")))
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
 
 (setq org-ellipsis " ,,,")
 
@@ -116,11 +130,12 @@
          :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
 
 (map! :map doom-leader-workspace-map
-      :desc "Switch workspace" "h" #'+workspace/switch-to-0
-      :desc "Switch workspace" "j" #'+workspace/switch-to-1
-      :desc "Switch workspace" "k" #'+workspace/switch-to-2
-      :desc "Switch workspace" "l" #'+workspace/switch-to-3
-      :desc "Switch workspace" "TAB" #'+workspace/switch-to)
+      :desc "Switch workspace" "h" #'+workspace/switch-left
+      :desc "Switch workspace" "j" #'+workspace/switch-to-0
+      :desc "Switch workspace" "k" #'+workspace/switch-to-1
+      :desc "Switch workspace" "l" #'+workspace/switch-right
+     ;; :desc "Switch workspace" "TAB" #'+workspace/switch-to
+      )
 
 (map! :after rustic
       :map rustic-mode-map
@@ -130,13 +145,41 @@
       :desc "Cargo current test"  "T" #'rustic-cargo-current-test)
 
 (map! :leader
+      :prefix-map ("d" . "utilites")
+      :desc "Display tab bar"           "d" #'+workspace/display
+      :desc "Switch workspace"          "h" #'+workspace/other
+      :desc "Switch workspace"          "j" #'+workspace/switch-to-0
+      :desc "Switch workspace"          "k" #'+workspace/switch-to-1
+      :desc "Switch workspace"          "l"  #'+workspace/switch-to-2
+      :desc "Switch workspace"          "SPC" #'+workspace/switch-to
+      :desc "Switch project"            "p" #'projectile-switch-project
+      :desc "Switch to last workspace"  "m"   #'+workspace/other
+      :desc "New workspace"             "n"   #'+workspace/new
+      :desc "New named workspace"       "N"   #'+workspace/new-named
+      :desc "Delete this workspace"     "K"   #'+workspace/delete
+      :desc "Rename workspace"          "r"   #'+workspace/rename
+      :desc "Switch to 1st workspace"   "1"   #'+workspace/switch-to-0
+      :desc "Switch to 2nd workspace"   "2"   #'+workspace/switch-to-1
+      :desc "Switch to 3rd workspace"   "3"   #'+workspace/switch-to-2
+      :desc "Switch to 4th workspace"   "4"   #'+workspace/switch-to-3
+      :desc "Switch to 5th workspace"   "5"   #'+workspace/switch-to-4
+      :desc "Switch to 6th workspace"   "6"   #'+workspace/switch-to-5
+      :desc "Switch to 7th workspace"   "7"   #'+workspace/switch-to-6
+      :desc "Switch to 8th workspace"   "8"   #'+workspace/switch-to-7
+      :desc "Switch to 9th workspace"   "9"   #'+workspace/switch-to-8
+      :desc "Switch to final workspace" "0"   #'+workspace/switch-to-final
+      )
+
+(map! :leader
       :desc "vterm" "?" #'vterm
-      :prefix-map ("j" . "tobas bindings")
+      :prefix-map ("j" . "utilites")
        :desc "Comment region"          "c" #'comment-region
        :desc "Uncomment region"        "u" #'uncomment-region
        :desc "Format region"           "f" #'+format/region-or-buffer
        :desc "vterm"                   "v" #'vterm
-       :desc "Maxize window"           "w" #'doom/window-maximize-buffer)
+       :desc "Maxize window"           "w" #'doom/window-maximize-buffer
+       :desc "Switch project"           "p" #'projectile-switch-project
+       )
 
 (map!
       :leader
@@ -146,13 +189,17 @@
        :desc "Node immediate insert"   "I" #'org-roam-node-insert-immediate
        :desc "Buffer toggle"           "l" #'org-roam-buffer-toggle
        :desc "Org capture finalize"    "s" #'org-capture-finalize
-       :desc "Toggle roam buffer"      "r" #'org-roam-buffer-toggle
-       :desc "Launch roam buffer"      "R" #'org-roam-buffer-display-dedicated
+       :desc "Random Todo file"        "R" #'t/random-todo-heading
+       :desc "Random Todo agenda"      "r" #'t/random-todo-heading-agenda
+       ;:desc "Toggle roam buffer"      "R" #'org-roam-buffer-toggle
+       ;:desc "Launch roam buffer"      "R" #'org-roam-buffer-display-dedicated
        :desc "Todo list"               "t" #'my/org-todo-list
-       :desc "Calendar"                "c" #'=calendar
+       :desc "Do list"                 "d" #'my/org-do-list
+       :desc "Org Capture"             "c" #'t/org-roam-capture
+       :desc "Calendar"                "C" #'=calendar
        :desc "Pomodoro"                "p" #'org-pomodoro
        ;; :desc "Sync database"              "s" #'org-roam-db-sync
-       (:prefix ("d" . "by date")
+       (:prefix ("D" . "by date")
         :desc "Goto previous note"        "b" #'org-roam-dailies-goto-previous-note
         :desc "Goto date"                 "d" #'org-roam-dailies-goto-date
         :desc "Capture date"              "D" #'org-roam-dailies-capture-date
@@ -197,7 +244,7 @@
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
 
-(after! lsp-clangd
+(with-eval-after-load 'lsp-clangd
   (setq lsp-clients-clangd-args
         '("-j=3"
           "--background-index"
@@ -219,8 +266,7 @@
 (setq ranger-show-hidden t)
 (add-hook! 'ranger-mode-hook (ranger-hook-config))
 
-(after! org-roam (load! "org_roam_custom.el"))
-
+(with-eval-after-load 'org (load! "org_roam_custom.el"))
 (load! "themes/modus-themes.el")
 
 ;; (after! projectile
@@ -234,21 +280,35 @@
 ;;   :after '(evil-window-split evil-window-vsplit)
 ;;   (consult-buffer))
 
+;; (set-popup-rules!
+;;   '(("^\\*cargo" :side right
+;;      :size 80
+;;      :select t)
+;;     ("^\\*vterm" :side right
+;;      :size 80
+;;      :select t)
+;;     ))
+
+;; (add-hook! 'window-setup-hook
+;;   (load! "org_roam_custom.el"))
+
 (set-popup-rules!
-  '(("^\\*cargo" :side right
-     :size 80
-     :select t)))
+    '(("^\\*cargo" :side right
+       :size 80
+       :select t)))
 
-;; (add-hook 'window-setup-hook
-;;   (set-popup-rule!
-;;     '("^\\*vterm*" :side right
-;;        :size 80
-;;        :select t)))
+(with-eval-after-load 'vterm
+  (set-popup-rules!
+    '(("^\\*vterm" :side right
+       :size 80
+       :select t))))
 
-(after! 'evil
-  (evil-set-initial-state 'vterm-mode 'insert))
 
-(add-hook! 'vterm-exit-functions (shell-command "setxkbmap br"))
+
+;; (after! 'evil
+;;   (evil-set-initial-state 'vterm-mode 'insert))
+
+(add-hook! 'vterm-exit-functions (t/change-kbd-layout "br"))
 
 (setq org-agenda-custom-commands
       '(("v" "A better agenda view"
@@ -257,3 +317,42 @@
                  (org-agenda-overriding-header "High-priority unfinished tasks:")))
           (agenda "")
           (alltodo "")))))
+
+(defun t/random-todo-heading()
+  (interactive)
+  (org-randomnote--go-to-random-header buffer-file-name "TODO=\"TODO\""))
+
+(defun t/random-todo-heading-agenda()
+  (interactive)
+    (org-randomnote "TODO=\"TODO\""))
+
+(defun t/org-roam-capture ()
+  (interactive)
+  (org-roam-capture- :node (org-roam-node-create)
+                     :templates '(("n" "inbox note" plain "* [%<%A %d %R>] %?"
+                                   :if-new (file+head "Inbox.org" "#+title: Inbox\n"))
+                                  ("t" "inbox todo" plain "* TODO %?"
+                                   :if-new (file+head "Inbox.org" "#+title: Inbox\n"))
+                                  )))
+(setq yequake-frames
+      '(("Scratch" .
+         ((width . 0.75)
+          (height . 0.5)
+          (alpha . 0.93)
+          (buffer-fns . ("*scratch*"))
+          (frame-parameters . ((undecorated . t)))))
+
+        ("Todos" .
+         ((width . 0.75)
+          (height . 0.5)
+          (alpha . 0.93)
+          (buffer-fns . (my/org-do-list))
+          (frame-parameters . ((undecorated . t)))))
+
+        ("Agenda" .
+         ((width . 0.75)
+          (height . 0.5)
+          (alpha . 0.93)
+          (buffer-fns . (org-agenda-list))
+          (frame-parameters . ((undecorated . t)))))
+        ))

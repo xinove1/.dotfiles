@@ -100,9 +100,7 @@ plugins=(git)
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias gfunny="git commit -m "$(curl -s http://whatthecommit.com/index.txt)""
-export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/.emacs.d/bin
-export PATH=$PATH:~/Documents/rtags/bin
 
 alias n="norminette"
 alias c="cc -Wall -Wextra -Werror -g -fsanitize=address *.c"
@@ -116,7 +114,6 @@ alias k="sh ~/Documents/scripts/.keyboard.sh"
 
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/.doom/bin
-export LEDGER_FILE=~/stuff/Notas/2021.journal
 export USER=nthomas-
 export MAIL=nthomas-@student.42sp.org.br
 export DEBUGINFOD_URLS="https://debuginfod.archlinux.org"
