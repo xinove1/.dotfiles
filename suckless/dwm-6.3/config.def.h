@@ -68,7 +68,7 @@ static const Layout layouts[] = {
 /* key definitions */
 #define MODKEY Mod1Mask
 #define MOD2KEY Mod4Mask
-#define MOD3KEY Mod5Mask
+
 #define TAGKEYS(CHAIN,KEY,TAG) \
 	{ MODKEY,                       CHAIN,    KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           CHAIN,    KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -85,8 +85,8 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "alacritty", NULL };
 
 static Key keys[] = {
-	/* modifier                     chain key   key        function        argument */
-	// Opening programs
+	modifier                     chain key   key        function        argument
+	Opening programs
 	{ MODKEY,                       -1,         XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       -1,         XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_o,       XK_m,      spawn,          SHCMD("emacsclient -c -a 'emacs'") },
@@ -98,10 +98,6 @@ static Key keys[] = {
 	{ MODKEY,                       XK_o,       XK_d,      spawn,          SHCMD("discord") },
 	{ MOD2KEY,                      -1,         XK_space,  spawn,          SHCMD("~/Documents/scripts/change_layout.sh") },
 	{ MOD2KEY|ShiftMask,            -1,         XK_s,      spawn,          SHCMD("flameshot gui") },
-	{ MOD3KEY,                      -1,         XK_i,      spawn,          SHCMD("~/Documents/scripts/change_layout.sh && xdotool key i") },
-	{ MOD3KEY|ShiftMask,            -1,         XK_i,      spawn,          SHCMD("xdotool key I && ~/Documents/scripts/change_layout.sh") },
-	{ MOD3KEY,                      -1,         XK_a,      spawn,          SHCMD("xdotool key a && ~/Documents/scripts/change_layout.sh") },
-	{ MOD3KEY|ShiftMask,            -1,         XK_a,      spawn,          SHCMD("xdotool key A && ~/Documents/scripts/change_layout.sh") },
 
     // Layout/Window movement and manipulation
 	//{ MODKEY,                       -1,         XK_b,      togglebar,      {0} },
@@ -137,15 +133,15 @@ static Key keys[] = {
 	{ MODKEY,                       XK_d,       XK_l,      viewtoright,    {0} },
 	{ MODKEY,                       XK_d,       XK_j,      tagtoleft,      {0} },
 	{ MODKEY,                       XK_d,       XK_k,      tagtoright,     {0} },
-	TAGKEYS(                        XK_w,       XK_h,                      0)
-	TAGKEYS(                        XK_w,       XK_j,                      1)
-	TAGKEYS(                        XK_w,       XK_k,                      2)
-	TAGKEYS(                        XK_w,       XK_l,                      3)
-	TAGKEYS(                        XK_w,       XK_u,                      4)
-	TAGKEYS(                        XK_w,       XK_i,                      5)
-	TAGKEYS(                        XK_w,       XK_o,                      6)
-	TAGKEYS(                        XK_w,       XK_n,                      7)
-	TAGKEYS(                        XK_w,       XK_m,                      8)
+	TAGKEYS(                        XK_w,       XK_h,                      4)
+	TAGKEYS(                        XK_w,       XK_j,                      0)
+	TAGKEYS(                        XK_w,       XK_k,                      1)
+	TAGKEYS(                        XK_w,       XK_l,                      2)
+	TAGKEYS(                        XK_w,       XK_u,                      3)
+	TAGKEYS(                        XK_w,       XK_i,                      4)
+	TAGKEYS(                        XK_w,       XK_o,                      5)
+	TAGKEYS(                        XK_w,       XK_n,                      6)
+	TAGKEYS(                        XK_w,       XK_m,                      7)
 	TAGKEYS(                        -1,         XK_1,                      0)
 	TAGKEYS(                        -1,         XK_2,                      1)
 	TAGKEYS(                        -1,         XK_3,                      2)

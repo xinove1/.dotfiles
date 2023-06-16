@@ -1,0 +1,22 @@
+Config { overrideRedirect = False
+       , font     = "Roboto Mono 11"
+       , bgColor  = "#3D405B"
+       , fgColor  = "#E07A5F"
+       , position = TopW L 90
+       , allDesktops = True
+       , commands = [
+                     Run Cpu
+                        [ "-L", "3"
+                        , "-H", "50"
+                        , "--high"  , "red"
+                        , "--normal", "green"
+                        ] 10
+                    , Run Memory ["--template", "Mem: <usedratio>%"] 10
+                    , Run Swap [] 10
+                    , Run Date "%a %d-%m-%Y <fc=#8be9fd>%H:%M</fc>" "date" 10
+                    , Run UnsafeXMonadLog
+                    ]
+       , sepChar  = "%"
+       , alignSep = "}{"
+       , template = "%UnsafeXMonadLog% }{ %cpu% | %memory% * %swap% | %date% "
+       }
