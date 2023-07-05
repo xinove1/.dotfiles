@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+echo "aa"
+(sleep 2 && xdotool key Ctrl+c) &|
+echo "bb"
+exit

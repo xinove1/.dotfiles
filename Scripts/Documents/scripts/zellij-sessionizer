@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    selected=$(find ~/stuff/ ~/stuff/projects/ ~/.dotfiles/ ~/  -mindepth 1 -maxdepth 4 -type d | fzf)
+fi
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+selected_name=$(basename "$selected" | tr . _)
+zellij_running=$(pgrep zellij)
+
+echo "selected: "$selected
+echo "selected_name: "$selected_name
+echo "session "$zellij_has_session
+
+if ! [[ -z $ZELLIJ ]] && ! [[ -z $zellij_running ]]; then
+    # Change to your keybinding for detaching
+    echo "inside zel"
+    xdotool keydown Alt key o keyup Alt key d
+    xdotool type "cd $selected"
+    xdotool key KP_Enter
+    xdotool type "zellij a -c $selected_name"
+    xdotool key KP_Enter
+    exit 0
+fi
+
+cd $selected
+zellij a -c $selected_name
