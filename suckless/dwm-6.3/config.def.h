@@ -36,7 +36,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = {"Term", "Doom", "wWw", "Discord", "Godot", "6", "7", "8", "8"};
+static const char *tags[] = {"Term", "Doom", "wWw", "Discord", "Godot", "6", "7", "8", "9"};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -66,8 +66,9 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
-#define MOD2KEY Mod4Mask
+//#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
+#define MOD2KEY Mod1Mask
 
 #define TAGKEYS(CHAIN,KEY,TAG) \
 	{ MODKEY,                       CHAIN,    KEY,      view,           {.ui = 1 << TAG} }, \
@@ -85,8 +86,8 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "alacritty", NULL };
 
 static Key keys[] = {
-	modifier                     chain key   key        function        argument
-	Opening programs
+//	modifier                     chain key   key        function        argument
+//	Opening programs
 	{ MODKEY,                       -1,         XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       -1,         XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_o,       XK_m,      spawn,          SHCMD("emacsclient -c -a 'emacs'") },
@@ -96,8 +97,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_o,       XK_r,      spawn,          SHCMD("emacsclient -c -a 'emacs' --eval '(ranger)'") },
 	{ MODKEY,                       XK_o,       XK_b,      spawn,          SHCMD("firefox") },
 	{ MODKEY,                       XK_o,       XK_d,      spawn,          SHCMD("discord") },
-	{ MOD2KEY,                      -1,         XK_space,  spawn,          SHCMD("~/Documents/scripts/change_layout.sh") },
-	{ MOD2KEY|ShiftMask,            -1,         XK_s,      spawn,          SHCMD("flameshot gui") },
+	{ MODKEY,                       -1,         XK_space,  spawn,          SHCMD("~/Documents/scripts/change_layout.sh") },
+	{ MODKEY|ShiftMask,             -1,         XK_s,      spawn,          SHCMD("flameshot gui") },
 
     // Layout/Window movement and manipulation
 	//{ MODKEY,                       -1,         XK_b,      togglebar,      {0} },
@@ -108,7 +109,7 @@ static Key keys[] = {
 	{ MODKEY,                       -1,         XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       -1,         XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY|ShiftMask,             -1,         XK_Return, zoom,           {0} },
-	{ MODKEY,                       -1,         XK_Tab,    view,           {0} },
+	{ MOD2KEY,                       -1,         XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             -1,         XK_c,      killclient,     {0} },
 	{ MODKEY,                       XK_l,         XK_t,      setlayout,      {.v = &layouts[0]} }, // tiling
 	{ MODKEY,                       XK_l,         XK_f,      setlayout,      {.v = &layouts[2]} }, //Monocle

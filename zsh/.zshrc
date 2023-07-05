@@ -8,7 +8,8 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="refined"
+ZSH_THEME="robbyrussell"
+#refined	
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -23,14 +24,13 @@ ZSH_THEME="refined"
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
@@ -45,8 +45,9 @@ ZSH_THEME="refined"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
-# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -72,7 +73,7 @@ ZSH_THEME="refined"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-#source $ZSH/oh-my-zsh.sh
+source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -82,11 +83,11 @@ plugins=(git)
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
- if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='nvim'
- else
-   export EDITOR='nvim'
- fi
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -99,9 +100,14 @@ plugins=(git)
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias gfunny="git commit -m "$(curl -s http://whatthecommit.com/index.txt)""
-export PATH=$PATH:~/.emacs.d/bin
+export PATH=$PATH:~/.config/emacs/bin
+export PATH=$PATH:~/.cargo/bin
+export PATH=$PATH:~/Documents/scripts
+export PATH=$PATH:~/.local/bin
 
+alias ls="exa -a"
+alias zel="zellij"
+alias gfunny="git commit -m "$(curl -s http://whatthecommit.com/index.txt)""
 alias n="norminette"
 alias c="cc -Wall -Wextra -Werror -g -fsanitize=address *.c"
 alias t="cc -Wall -Wextra -Werror -g -fsanitize=address *.c && ./a.out"
@@ -112,9 +118,12 @@ alias flux="redshift -t 2500k:2500k -b 0.6:0.6 -l -25:-49"
 alias flux2="redshift -t 4500k:4500k -b 0.6:0.6 -l -25:-49"
 alias k="sh ~/Documents/scripts/.keyboard.sh"
 
-export PATH=$PATH:~/.cargo/bin
-export PATH=$PATH:~/.doom/bin
-export USER=nthomas-
-export MAIL=nthomas-@student.42sp.org.br
+#export LEDGER_FILE=~/stuff/Notas/2021.journal
+#export USER=nthomas-
+#export MAIL=nthomas-@student.42sp.org.br
 export DEBUGINFOD_URLS="https://debuginfod.archlinux.org"
+
+eval "$(zoxide init zsh)"
+
+#bindkey -s '^[x' "zellij run -fc -- zellij-sessionizer"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
