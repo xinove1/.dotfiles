@@ -1,2 +1,6 @@
 require("bees.remap")
-print("bees")
+require("bees.packer")
+require("bees.set")
+require("bees.layout_switch")
+-- require("bees.xkbswitch").setup()
+vim.cmd('colorscheme rose-pine')
