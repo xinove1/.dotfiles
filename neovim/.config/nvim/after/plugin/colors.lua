@@ -1,5 +1,6 @@
 function ColorBees(color)
-	color = color or "catppuccin-mocha"
+	--color = color or "catppuccin-mocha"
+	color = color or "citruszest"
     -- TODO 
 	--color = color or "kanagawa-dragon"
 	vim.cmd.colorscheme(color)

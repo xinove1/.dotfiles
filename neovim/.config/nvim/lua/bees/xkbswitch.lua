@@ -1,5 +1,6 @@
 -- stolen from https://raw.githubusercontent.com/ivanesmantovich/xkbswitch.nvim/master/lua/xkbswitch.lua
 local M = {}
+print("AAAAAAAAAAAA")
 -- nvim_create_autocmd shortcut
 local autocmd = vim.api.nvim_create_autocmd
 local xkb_switch_lib = nil
@@ -55,8 +56,8 @@ function M.setup()
             pattern = "*",
             callback = function()
                 vim.schedule(function()
-			vim.cmd("silent exec '!setxkbmap dvorak'")
-			print(vim.api.nvim_buf_get_name(0))
+			 vim.cmd("silent exec '!setxkbmap us -variant dvorak'")
+			--print(vim.api.nvim_buf_get_name(0))
 --                    vim.fn.libcall(xkb_switch_lib, 'Xkb_Switch_setXkbLayout', 'dvorak')
                 end)
             end

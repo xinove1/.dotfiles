@@ -104,6 +104,7 @@ export PATH=$PATH:~/.config/emacs/bin
 export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/Documents/scripts
 export PATH=$PATH:~/.local/bin
+export PATH=$PATH:~/.roswell/bin
 
 alias ls="exa -a"
 alias zel="zellij"
@@ -117,6 +118,7 @@ alias a="./a.out"
 alias flux="redshift -t 2500k:2500k -b 0.6:0.6 -l -25:-49"
 alias flux2="redshift -t 4500k:4500k -b 0.6:0.6 -l -25:-49"
 alias k="sh ~/Documents/scripts/.keyboard.sh"
+alias ew="emacsclient -nw"
 
 #export LEDGER_FILE=~/stuff/Notas/2021.journal
 #export USER=nthomas-

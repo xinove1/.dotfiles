@@ -89,7 +89,7 @@
 
 
 (defun set-evil-hooks ()
-  (add-hook! 'evil-insert-state-entry-hook (t/change-kbd-layout "dvorak"))
+  (add-hook! 'evil-insert-state-entry-hook (t/change-kbd-layout "us -variant dvorak"))
   (add-hook! 'evil-insert-state-exit-hook (t/change-kbd-layout "br")))
 
 (add-hook! 'window-setup-hook (set-evil-hooks))
@@ -193,7 +193,8 @@
  :desc "Node insert"             "i" #'org-roam-node-insert
  :desc "Node immediate insert"   "I" #'org-roam-node-insert-immediate
  :desc "Buffer toggle"           "l" #'org-roam-buffer-toggle
- :desc "Org capture finalize"    "s" #'org-capture-finalize
+ :desc "Org capture finalize"    "S" #'org-capture-finalize
+ :desc "Org capture finalize"    "s" #'t/org-roam-rg-search
  :desc "Random org heading"        "R" #'t/random-heading
  :desc "Random Todo agenda"      "r" #'t/random-todo-heading-agenda
                                         ;:desc "Toggle roam buffer"      "R" #'org-roam-buffer-toggle
@@ -345,9 +346,17 @@
   (org-roam-capture- :node (org-roam-node-create)
                      :templates '(("n" "inbox note" plain "* [%<%A %d %R>] %?"
                                    :if-new (file+head "Inbox.org" "#+title: Inbox\n"))
-                                  ("t" "inbox todo" plain "* TODO %?"
+                                  ("t" "inbox todo" entry "* TODO %?"
                                    :if-new (file+head "Inbox.org" "#+title: Inbox\n"))
+                                  ("j" "journal" entry "*  [[id:d10cd556-cc88-4393-96d2-11526fa4fcfe][Journal]] - %<%A %d %R> \n  - %?"
+                                   :if-new (file+head "daily/%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
                                   )))
+
+(defun t/org-roam-rg-search ()
+  "Search org-roam directory using consult-ripgrep. With live-preview."
+  (interactive)
+  (let ((consult-ripgrep-command "rg --null --ignore-case --type org --line-buffered --color=always --max-columns=500 --no-heading --line-number . -e ARG OPTS"))
+    (consult-ripgrep org-roam-directory)))
 
 (setq t/vterm-before nil)
 

@@ -23,6 +23,8 @@ return require('packer').startup(function(use)
     use('nyoom-engineering/oxocarbon.nvim')
     use('catppuccin/nvim')
     use('rebelot/kanagawa.nvim')
+	use('zootedb0t/citruszest.nvim')
+
 
     -- TreeSitter
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })

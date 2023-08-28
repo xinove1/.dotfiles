@@ -79,6 +79,11 @@ _G.packer_plugins = {
     path = "/home/xinove/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
+  ["citruszest.nvim"] = {
+    loaded = true,
+    path = "/home/xinove/.local/share/nvim/site/pack/packer/start/citruszest.nvim",
+    url = "https://github.com/zootedb0t/citruszest.nvim"
+  },
   ["cmp-nvim-lsp"] = {
     loaded = true,
     path = "/home/xinove/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
