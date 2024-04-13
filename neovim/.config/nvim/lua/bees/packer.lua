@@ -32,7 +32,11 @@ return require('packer').startup(function(use)
     use('mfussenegger/nvim-dap')
 
 
-    use('ThePrimeagen/harpoon')
+    use {
+      "ThePrimeagen/harpoon",
+      branch = "harpoon2",
+      requires = { {"nvim-lua/plenary.nvim"} }
+    }
 
     use('mbbill/undotree')
     use {
