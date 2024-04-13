@@ -8,4 +8,5 @@ xrandr --output HDMI-1 --off
  emacs -daemon &
  nitrogen --restore &
  picom &
+ export DEBUGINFOD_URLS="https://debuginfod.archlinux.org"
 #. "$HOME/.cargo/env"

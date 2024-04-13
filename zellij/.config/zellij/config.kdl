@@ -148,6 +148,14 @@ keybinds clear-defaults=true {
         bind "Alt 9" { GoToTab 9; SwitchToMode "Normal"; }
         bind "Alt u" { ToggleTab; }
         //bind "Alt d" { ToggleFloatingPanes; Run "zellij" "run" "-fc" "--" "zellij-sessionizer";}
+        bind "Alt d" {
+            LaunchOrFocusPlugin "zellij:session-manager" {
+                floating true
+                move_to_focused_tab true
+            };
+            SwitchToMode "Normal"
+        }
+		//bind "Alt z" { Run "sh" "-c" "~/Documents/scripts/change_layout.sh";}
         bind "Alt w" { ToggleFloatingPanes; SwitchToMode "Normal"; }
         bind "Alt f" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
         bind "Alt g" { SwitchToMode "Locked"; }

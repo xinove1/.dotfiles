@@ -54,4 +54,7 @@
 (package! evil-escape :disable t)
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
 (package! org-randomnote)
-(package! yequake)
+;(package! yequake)
+(package! harpoon)
+(package! vertico-posframe)
+(package! golden-ratio :recipe (:host nil :repo "https://git.sr.ht/~wklew/golden" ))

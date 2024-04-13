@@ -50,19 +50,36 @@
                                   "Roboto Mono-13"
                                   "Hack-13"
                                   "Iosevka Term-13"
-                                  "TamzenForPowerline-15")))
+                                  ;"TamzenForPowerline-15"
+                                  )))
 
-(setq doom-theme (seq-random-elt '(doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge modus-vivendi modus-vivendi-tinted
-                                   doom-molokai doom-monokai-pro doom-old-hope doom-gruvbox old-rice-putin)))
-
-(setq org-directory "~/stuff/Notas")
+; TODO different seletction of themes for term mode
+(setq doom-theme (seq-random-elt '( doom-horizon modus-vivendi-tinted
+                                   doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge modus-vivendi modus-vivendi-tinted
+                                   doom-molokai doom-monokai-pro doom-old-hope doom-gruvbox doom-tomorrow-night old-rice-putin
+                                   )))
 
 (setq display-line-numbers-type 'relative)
+(setq scroll-margin 8)
+
+(defun t/scroll-down-recenter ()
+  (interactive)
+  (evil-scroll-down 0)
+  (evil-scroll-line-to-center nil))
+
+(defun t/scroll-up-recenter ()
+  (interactive)
+  (evil-scroll-up 0)
+  (evil-scroll-line-to-center nil))
 
 (with-eval-after-load 'evil
   (defalias #'forward-evil-word #'forward-evil-symbol)
   ;; make evil-search-word look for symbol rather than word boundaries
-  (setq-default evil-symbol-word-search t))
+  (setq-default evil-symbol-word-search t)
+  (define-key evil-normal-state-map (kbd "C-D") 't/scroll-down-recenter)
+  (define-key evil-normal-state-map (kbd "C-U") 't/scroll-up-recenter)
+  )
+
 
 ;; TODO Check if this is really needed
 (setq-hook! '(c-mode-hook c++-mode-hook) indent-tabs-mode t)
@@ -90,47 +107,16 @@
 
 (defun set-evil-hooks ()
   (add-hook! 'evil-insert-state-entry-hook (t/change-kbd-layout "us -variant dvorak"))
+  (add-hook! 'minibuffer-mode-hook (t/change-kbd-layout "us -variant dvorak"))
+  (add-hook! 'minibuffer-exit-hook (t/change-kbd-layout "br"))
   (add-hook! 'evil-insert-state-exit-hook (t/change-kbd-layout "br")))
 
 (add-hook! 'window-setup-hook (set-evil-hooks))
-
-;; config org pomodoro sons 😏
-(setq org-pomodoro-finished-sound "~/Music/dogdoin.wav")
-(setq org-pomodoro-short-break-sound "~/Music/fart.wav")
-;; (setq org-pomodoro-finished-sound-args)
-
-(with-eval-after-load 'org
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "DO(T)" "PROJ(p)" "LOOP(r)" "STRT(s)" "WAIT(w)" "HOLD(h)" "IDEA(i)" "|" "DONE(d)" "KILL(k)")
-          (sequence "[ ](T)" "[-](S)" "[?](W)" "|" "[X](D)")
-          (sequence "|" "OKAY(o)" "YES(y)" "NO(n)"))))
-
-
-(setq-default org-display-custom-times t)
-(setq org-time-stamp-custom-formats '("<%A %e %b %Y>" . "<%A %e %b %Y %H:%M>"))
-(setq org-agenda-prefix-format
-      '((agenda . " %i %-12:c%?-12t% s")
-        (todo   . " ")
-        (tags   . " %i %-12:c")
-        (search . " %i %-12:c")))
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (setq fancy-splash-image (seq-random-elt '("~/Documents/imagens/snail2.png" "~/Documents/imagens/dardo2.png" "~/Documents/imagens/frutacomun.png" "~/Documents/imagens/sapo.png" "~/Documents/imagens/sapo2.png" "~/Documents/imagens/cafe2.png")))
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
-
-(setq org-ellipsis " ,,,")
-
-(setq org-roam-directory "~/stuff/Notas/roam")
-(setq org-roam-dailies-capture-templates
-      '(("d" "default" entry "* %? - %<%A %d %R>"
-         :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
-        ("h" "jush heading" entry "* %?"
-         :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
-        ("t" "todo" entry "* TODO %?"
-         :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
-        ("j" "journal" entry "*  [[id:d10cd556-cc88-4393-96d2-11526fa4fcfe][Journal]] - %<%A %d %R> \n  - %?"
-         :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
 
 (map! :map doom-leader-workspace-map
       :desc "Switch workspace" "h" #'+workspace/switch-left
@@ -140,6 +126,13 @@
       ;; :desc "Switch workspace" "TAB" #'+workspace/switch-to
       )
 
+(setq! sly-command-switch-to-existing-lisp 'always)
+
+(map! :after sly
+      :localleader
+      :map lisp-mode-map
+      :desc "Sly" "l" #'sly)
+
 (map! :after rustic
       :map rustic-mode-map
       :localleader
@@ -148,42 +141,49 @@
       :desc "Cargo current test"  "T" #'rustic-cargo-current-test)
 
 (map! :leader
-      :prefix-map ("d" . "utilites")
+      :prefix-map ("d" . "quick workspaces")
       :desc "Display tab bar"           "d" #'+workspace/display
-      :desc "Switch workspace"          "h" #'+workspace/other
-      :desc "Switch workspace"          "j" #'+workspace/switch-to-0
-      :desc "Switch workspace"          "k" #'+workspace/switch-to-1
-      :desc "Switch workspace"          "l"  #'+workspace/switch-to-2
-      :desc "Switch workspace"          "SPC" #'+workspace/switch-to
+      :desc "Switch to last workspace"  "h" #'+workspace/other
+      :desc "Switch workspace 0"        "j" #'+workspace/switch-to-0
+      :desc "Switch workspace 1"        "k" #'+workspace/switch-to-1
+      :desc "Switch workspace 2"        "l"  #'+workspace/switch-to-2
+      :desc "Switch workspace 3"        "ç"  #'+workspace/switch-to-3
+      :desc "Select workspace"          "SPC" #'+workspace/switch-to
       :desc "Switch project"            "p" #'projectile-switch-project
-      :desc "Switch to last workspace"  "m"   #'+workspace/other
-      :desc "New workspace"             "n"   #'+workspace/new
-      :desc "New named workspace"       "N"   #'+workspace/new-named
-      :desc "Delete this workspace"     "K"   #'+workspace/delete
-      :desc "Rename workspace"          "r"   #'+workspace/rename
-      :desc "Switch to 1st workspace"   "1"   #'+workspace/switch-to-0
-      :desc "Switch to 2nd workspace"   "2"   #'+workspace/switch-to-1
-      :desc "Switch to 3rd workspace"   "3"   #'+workspace/switch-to-2
-      :desc "Switch to 4th workspace"   "4"   #'+workspace/switch-to-3
-      :desc "Switch to 5th workspace"   "5"   #'+workspace/switch-to-4
-      :desc "Switch to 6th workspace"   "6"   #'+workspace/switch-to-5
-      :desc "Switch to 7th workspace"   "7"   #'+workspace/switch-to-6
-      :desc "Switch to 8th workspace"   "8"   #'+workspace/switch-to-7
-      :desc "Switch to 9th workspace"   "9"   #'+workspace/switch-to-8
-      :desc "Switch to final workspace" "0"   #'+workspace/switch-to-final
       )
 
-(map! :leader
-      :desc "vterm" "?" #'+vterm/toggle
-      :prefix-map ("j" . "utilites")
+(map!
+      ;:desc "open allacrity" "M-w" #'(lambda () (shell-command "tdrop -ar -y 60 -x 5% -w 90% -h 80% -C 'zel a h' alacritty"))
+      :leader
+      :prefix-map ("j" . "Utilites")
       :desc "Comment region"          "c" #'comment-region
       :desc "Uncomment region"        "u" #'uncomment-region
-      :desc "Format region"           "f" #'+format/region-or-buffer
-      :desc "vterm"                   "v" #'t/vterm-open
+      :desc "Format region"           "F" #'+format/region-or-buffer
+      :desc "vterm open"              "v" #'t/vterm-open
       :desc "vterm send compile"      "s" #'t/vterm-send
-      :desc "vterm compile and switch" "a" #'t/vterm-send-switch
+      :desc "vterm compile and switch""a" #'t/vterm-send-switch
       :desc "Maxize window"           "w" #'doom/window-maximize-buffer
-      :desc "Switch project"           "p" #'projectile-switch-project
+      :desc "Switch project"          "p" #'projectile-switch-project
+      )
+
+;; Harpoon
+;; (setq! harpoon-project-package '+workspace-current-name)
+(setq! harpoon-project-package 'projectile)
+(map! :leader
+      :prefix-map ("k" . "Harpoon")
+      :desc "Go to file 1" "a" #'harpoon-go-to-1
+      :desc "Go to file 2" "s" #'harpoon-go-to-2
+      :desc "Go to file 3" "d" #'harpoon-go-to-3
+      :desc "Go to file 4" "f" #'harpoon-go-to-4
+      :desc "Go to file 5" "q" #'harpoon-go-to-5
+      :desc "Go to file 6" "w" #'harpoon-go-to-6
+      :desc "Go to file 7" "e" #'harpoon-go-to-7
+      :desc "Go to file 8" "r" #'harpoon-go-to-8
+      :desc "Open Menu" "SPC" #'harpoon-toggle-quick-menu
+      :desc "Open Harpoon File" "k" #'harpoon-toggle-file
+      :desc "Delete some harpoon" "x" #'harpoon-delete-item
+      :desc "Clear Harpoon" "c" #'harpoon-clear
+      :desc "Save Current File to Harpoon" "j" #'harpoon-add-file
       )
 
 (map!
@@ -194,11 +194,12 @@
  :desc "Node immediate insert"   "I" #'org-roam-node-insert-immediate
  :desc "Buffer toggle"           "l" #'org-roam-buffer-toggle
  :desc "Org capture finalize"    "S" #'org-capture-finalize
- :desc "Org capture finalize"    "s" #'t/org-roam-rg-search
+ ;:desc "Org capture finalize"    "s" #'t/org-roam-rg-search
  :desc "Random org heading"        "R" #'t/random-heading
  :desc "Random Todo agenda"      "r" #'t/random-todo-heading-agenda
                                         ;:desc "Toggle roam buffer"      "R" #'org-roam-buffer-toggle
                                         ;:desc "Launch roam buffer"      "R" #'org-roam-buffer-display-dedicated
+ :desc "Org Agenda"              "a" #'org-agenda
  :desc "Todo list"               "t" #'my/org-todo-list
  :desc "Do list"                 "d" #'my/org-do-list
  :desc "Org Capture"             "c" #'t/org-roam-capture
@@ -325,38 +326,6 @@
 
 (add-hook! 'vterm-exit-functions (t/change-kbd-layout "br"))
 
-(setq org-agenda-custom-commands
-      '(("v" "A better agenda view"
-         ((tags "PRIORITY=\"A\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "High-priority unfinished tasks:")))
-          (agenda "")
-          (alltodo "")))))
-
-(defun t/random-heading()
-  (interactive)
-  (org-randomnote--go-to-random-header buffer-file-name "*"))
-
-(defun t/random-todo-heading-agenda()
-  (interactive)
-  (org-randomnote "TODO=\"TODO\""))
-
-(defun t/org-roam-capture ()
-  (interactive)
-  (org-roam-capture- :node (org-roam-node-create)
-                     :templates '(("n" "inbox note" plain "* [%<%A %d %R>] %?"
-                                   :if-new (file+head "Inbox.org" "#+title: Inbox\n"))
-                                  ("t" "inbox todo" entry "* TODO %?"
-                                   :if-new (file+head "Inbox.org" "#+title: Inbox\n"))
-                                  ("j" "journal" entry "*  [[id:d10cd556-cc88-4393-96d2-11526fa4fcfe][Journal]] - %<%A %d %R> \n  - %?"
-                                   :if-new (file+head "daily/%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
-                                  )))
-
-(defun t/org-roam-rg-search ()
-  "Search org-roam directory using consult-ripgrep. With live-preview."
-  (interactive)
-  (let ((consult-ripgrep-command "rg --null --ignore-case --type org --line-buffered --color=always --max-columns=500 --no-heading --line-number . -e ARG OPTS"))
-    (consult-ripgrep org-roam-directory)))
 
 (setq t/vterm-before nil)
 
@@ -394,25 +363,59 @@
   (switch-to-buffer t/vterm-buff)
   (t/vterm-compile (compilation-read-command compile-command)))
 
-(setq yequake-frames
-      '(("Scratch" .
-         ((width . 0.75)
-          (height . 0.5)
-          (alpha . 0.93)
-          (buffer-fns . ("*scratch*")) ; TODO See if i can enter already in insert mode
-          (frame-parameters . ((undecorated . t)))))
+;; (setq yequake-frames
+;;       '(("Scratch" .
+;;          ((width . 0.75)
+;;           (height . 0.5)
+;;           (alpha . 0.93)
+;;           (buffer-fns . ("*scratch*")) ; TODO See if i can enter already in insert mode
+;;           (frame-parameters . ((undecorated . t)))))
 
-        ("Todos" .
-         ((width . 0.75)
-          (height . 0.5)
-          (alpha . 0.93)
-          (buffer-fns . (my/org-do-list))
-          (frame-parameters . ((undecorated . t)))))
+;;         ("Todos" .
+;;          ((width . 0.75)
+;;           (height . 0.5)
+;;           (alpha . 0.93)
+;;           (buffer-fns . (my/org-do-list))
+;;           (frame-parameters . ((undecorated . t)))))
 
-        ("Agenda" .
-         ((width . 0.75)
-          (height . 0.5)
-          (alpha . 0.93)
-          (buffer-fns . (org-agenda-list))
-          (frame-parameters . ((undecorated . t)))))
-        ))
+;;         ("Agenda" .
+;;          ((width . 0.75)
+;;           (height . 0.5)
+;;           (alpha . 0.93)
+;;           (buffer-fns . (org-agenda-list))
+;;           (frame-parameters . ((undecorated . t)))))
+;;         ("godot" .
+;;          ((width . 0.75)
+;;           (height . 0.5)
+;;           (alpha . 1.00)
+;;           (buffer-fns (projectile-switch-project-by-name "galaxy-defience"))
+;;           (frame-parameters . ((undecorated . t)))))
+;;         ))
+
+(setq lsp-zig-zls-executable "~/stuff/zls/zig-out/bin/zls")
+
+(with-eval-after-load  'sly
+ (setq sly-complete-symbol-function 'sly-flex-completions)
+ (set-popup-rule! "^\\*sly-mrepl"
+   :side 'right
+   :with 100
+   :select t
+   :quit nil
+   )
+ (set-popup-rule! "^\\*sly-inspector"
+   ;; :side 'bottom
+   ;; :height 50
+   ;; :select t
+   ;; :quit t
+   :ignore t
+   )
+ )
+
+(require 'golden)
+(global-golden-mode 1)
+
+(require 'vertico-posframe)
+(vertico-posframe-mode 1)
+(setq vertico-posframe-parameters
+      '((left-fringe . 8)
+        (right-fringe . 8)))

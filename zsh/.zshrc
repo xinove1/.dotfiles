@@ -105,6 +105,7 @@ export PATH=$PATH:~/.cargo/bin
 export PATH=$PATH:~/Documents/scripts
 export PATH=$PATH:~/.local/bin
 export PATH=$PATH:~/.roswell/bin
+export PATH=$PATH:~/stuff/zig-12/
 
 alias ls="exa -a"
 alias zel="zellij"
@@ -118,14 +119,18 @@ alias a="./a.out"
 alias flux="redshift -t 2500k:2500k -b 0.6:0.6 -l -25:-49"
 alias flux2="redshift -t 4500k:4500k -b 0.6:0.6 -l -25:-49"
 alias k="sh ~/Documents/scripts/.keyboard.sh"
+alias dv="sh ~/Documents/scripts/change_layout.sh"
 alias ew="emacsclient -nw"
 
 #export LEDGER_FILE=~/stuff/Notas/2021.journal
 #export USER=nthomas-
 #export MAIL=nthomas-@student.42sp.org.br
 export DEBUGINFOD_URLS="https://debuginfod.archlinux.org"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
 eval "$(zoxide init zsh)"
+export EMSDK_QUIET=1 
+source /home/xinove/stuff/emsdk/emsdk_env.sh 
 
 #bindkey -s '^[x' "zellij run -fc -- zellij-sessionizer"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
