@@ -54,7 +54,7 @@
                                   )))
 
 ; TODO different seletction of themes for term mode
-(setq doom-theme (seq-random-elt '( doom-horizon modus-vivendi-tinted
+(setq doom-theme (seq-random-elt '(doom-horizon modus-vivendi-tinted
                                    doom-peacock doom-henna doom-horizon doom-laserwave doom-rouge modus-vivendi modus-vivendi-tinted
                                    doom-molokai doom-monokai-pro doom-old-hope doom-gruvbox doom-tomorrow-night old-rice-putin
                                    )))

@@ -1,40 +1,13 @@
-[colors.bright]
-black = "#5b6268"
-blue = "#3071db"
-cyan = "#46d9ff"
-green = "#4db5bd"
-magenta = "#a9a1e1"
-red = "#da8548"
-white = "#dfdfdf"
-yellow = "#ecbe7b"
-
-[colors.cursor]
-cursor = "#528bff"
-text = "CellBackground"
-
-[colors.normal]
-black = "#1c1f24"
-blue = "#51afef"
-cyan = "#5699af"
-green = "#98be65"
-magenta = "#c678dd"
-red = "#ff6c6b"
-white = "#202328"
-yellow = "#da8548"
-
-[colors.primary]
-background = "#282c34"
-foreground = "#bbc2cf"
-
-[colors.selection]
-background = "#3e4451"
-text = "CellForeground"
+import = [
+	#"~/.config/alacritty/themes/themes/catppuccin_mocha.toml"
+	"~/.config/alacritty/themes/themes/citylights.toml.toml"
+]
 
 [env]
 TERM = "xterm-256color"
 
 [font]
-size = 13.0
+size = 12.0
 
 [font.normal]
 family = "Mononoki Nerd Font"
@@ -44,6 +17,49 @@ family = "Mononoki Nerd Font"
 #family = "JetBrains Mono"
 #family = "Hack"
 
+[scrolling]
+history = 5000
+
+[window]
+dynamic_padding = false
+opacity = 1.00
+title = "Alacritty"
+
+[window.class]
+general = "Alacritty"
+instance = "Alacritty"
+
+# [colors.bright]
+# black = "#5b6268"
+# blue = "#3071db"
+# cyan = "#46d9ff"
+# green = "#4db5bd"
+# magenta = "#a9a1e1"
+# red = "#da8548"
+# white = "#dfdfdf"
+# yellow = "#ecbe7b"
+
+# [colors.cursor]
+# cursor = "#528bff"
+# text = "CellBackground"
+
+# [colors.normal]
+# black = "#1c1f24"
+# blue = "#51afef"
+# cyan = "#5699af"
+# green = "#98be65"
+# magenta = "#c678dd"
+# red = "#ff6c6b"
+# white = "#202328"
+# yellow = "#da8548"
+
+# [colors.primary]
+# background = "#282c34"
+# foreground = "#bbc2cf"
+
+# [colors.selection]
+# background = "#3e4451"
+# text = "CellForeground"
 # [schemes.DoomOne.bright]
 # black = "#5b6268"
 # blue = "#3071db"
@@ -355,15 +371,3 @@ family = "Mononoki Nerd Font"
 # [schemes.TomorrowNight.primary]
 # background = "#1d1f21"
 # foreground = "#c5c8c6"
-
-[scrolling]
-history = 5000
-
-[window]
-dynamic_padding = false
-opacity = 1.00
-title = "Alacritty"
-
-[window.class]
-general = "Alacritty"
-instance = "Alacritty"
