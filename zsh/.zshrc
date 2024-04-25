@@ -106,11 +106,11 @@ export PATH=$PATH:~/Documents/scripts
 export PATH=$PATH:~/.local/bin
 export PATH=$PATH:~/.roswell/bin
 export PATH=$PATH:~/stuff/zig-12/
-
+export PATH=$PATH:~/stuff/software/cosmocc/bin
 alias ls="exa -a"
 alias zel="zellij"
 alias gfunny="git commit -m "$(curl -s http://whatthecommit.com/index.txt)""
-alias n="norminette"
+#alias n="norminette"
 alias c="cc -Wall -Wextra -Werror -g -fsanitize=address *.c"
 alias t="cc -Wall -Wextra -Werror -g -fsanitize=address *.c && ./a.out"
 alias y="cc ./libft/*.c *.c -Wall -Wextra -Werror -g -fsanitize=address -lmlx -lXext -lX11 -lbsd && ./a.out map.ber"
@@ -121,6 +121,8 @@ alias flux2="redshift -t 4500k:4500k -b 0.6:0.6 -l -25:-49"
 alias k="sh ~/Documents/scripts/.keyboard.sh"
 alias dv="sh ~/Documents/scripts/change_layout.sh"
 alias ew="emacsclient -nw"
+alias n="nvim"
+alias gd="godot project.godot --verbose"
 
 #export LEDGER_FILE=~/stuff/Notas/2021.journal
 #export USER=nthomas-
@@ -132,5 +134,4 @@ eval "$(zoxide init zsh)"
 export EMSDK_QUIET=1 
 source /home/xinove/stuff/emsdk/emsdk_env.sh 
 
-#bindkey -s '^[x' "zellij run -fc -- zellij-sessionizer"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
