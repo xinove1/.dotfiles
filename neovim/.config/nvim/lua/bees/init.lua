@@ -1,6 +1,7 @@
-require("bees.remap")
-require("bees.packer")
-require("bees.set")
-require("bees.layout_switch")
--- require("bees.xkbswitch").setup()
-vim.cmd('colorscheme rose-pine')
+require('bees.keymaps')
+require('bees.set')
+require('bees.harpoon')
+--vim.cmd 'colorscheme rose-pine'
+local themes = {"rose-pine", "kanagawa-dragon"}
+vim.cmd('colorscheme ' .. themes[math.random(#themes)])
+print('colothemes' .. themes[math.random(#themes)])
