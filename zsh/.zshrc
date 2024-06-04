@@ -122,6 +122,7 @@ alias k="sh ~/Documents/scripts/.keyboard.sh"
 alias dv="sh ~/Documents/scripts/change_layout.sh"
 alias ew="emacsclient -nw"
 alias n="nvim"
+alias e="make run"
 alias gd="godot project.godot --verbose"
 
 #export LEDGER_FILE=~/stuff/Notas/2021.journal

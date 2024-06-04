@@ -190,6 +190,7 @@
  :leader
  :prefix-map ("n" . "Notes")
  :desc "Node find"               "f" #'org-roam-node-find
+ :desc "Node find site"          "w" #'my/find-site-nodes
  :desc "Node insert"             "i" #'org-roam-node-insert
  :desc "Node immediate insert"   "I" #'org-roam-node-insert-immediate
  :desc "Buffer toggle"           "l" #'org-roam-buffer-toggle
@@ -204,7 +205,8 @@
  :desc "Do list"                 "d" #'my/org-do-list
  :desc "Org Capture"             "c" #'t/org-roam-capture
  :desc "Calendar"                "C" #'=calendar
- :desc "Pomodoro"                "p" #'org-pomodoro
+ :desc "Org publish"                "p" #'org-publish
+ :desc "Pomodoro"                "P" #'org-pomodoro
  ;; :desc "Sync database"              "s" #'org-roam-db-sync
  (:prefix ("D" . "by date")
   :desc "Goto previous note"        "b" #'org-roam-dailies-goto-previous-note

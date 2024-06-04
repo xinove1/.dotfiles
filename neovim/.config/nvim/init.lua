@@ -102,7 +102,12 @@ require('lazy').setup({
       'nvim-telescope/telescope.nvim', -- optional
       'ibhagwan/fzf-lua', -- optional
     },
-    config = true,
+    config = function()
+      local neogit = require 'neogit'
+      neogit.setup {}
+
+      vim.keymap.set('n', '<leader>gg', neogit.open, { desc = 'Open neogit' })
+    end,
   },
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
@@ -133,18 +138,18 @@ require('lazy').setup({
   --    require('gitsigns').setup({ ... })
   --
   -- See `:help gitsigns` to understand what the configuration keys do
-  -- { -- Adds git related signs to the gutter, as well as utilities for managing changes
-  --   'lewis6991/gitsigns.nvim',
-  --   opts = {
-  --     signs = {
-  --       add = { text = '+' },
-  --       change = { text = '~' },
-  --       delete = { text = '_' },
-  --       topdelete = { text = '‾' },
-  --       changedelete = { text = '~' },
-  --     },
-  --   },
-  -- },
+  { -- Adds git related signs to the gutter, as well as utilities for managing changes
+    'lewis6991/gitsigns.nvim',
+    opts = {
+       signs = {
+         add = { text = '+' },
+         change = { text = '~' },
+         delete = { text = '_' },
+         topdelete = { text = '‾' },
+         changedelete = { text = '~' },
+      },
+    },
+  },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -251,6 +256,7 @@ require('lazy').setup({
         -- pickers = {}
         --
         defaults = {
+          hidden = true,
           mappings = {
             i = {
               ['<esc>'] = actions.close,
@@ -260,6 +266,11 @@ require('lazy').setup({
               ['<C-h>'] = 'move_selection_next',
               ['<C-t>'] = 'move_selection_previous',
             },
+          },
+        },
+        pickers = {
+          find_files = {
+            hidden = true,
           },
         },
         extensions = {
@@ -405,7 +416,7 @@ require('lazy').setup({
           map('<leader>cd', require('telescope.builtin').lsp_definitions, 'Goto Definition')
 
           -- Find references for the word under your cursor.
-          map('<leader>cr', require('telescope.builtin').lsp_references, 'Goto References')
+          map('<leader>cR', require('telescope.builtin').lsp_references, 'Goto References')
 
           -- Jump to the implementation of the word under your cursor.
           --  Useful when your language has ways of declaring types without an actual implementation.
@@ -438,7 +449,7 @@ require('lazy').setup({
 
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
-          map('<leader>D', vim.lsp.buf.declaration, 'Goto Declaration')
+          map('<leader>cD', vim.lsp.buf.declaration, 'Goto Declaration')
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
@@ -609,6 +620,7 @@ require('lazy').setup({
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      'hrsh7th/cmp-nvim-lsp-signature-help',
     },
     config = function()
       -- See `:help cmp`
@@ -630,20 +642,27 @@ require('lazy').setup({
         -- No, but seriously. Please read `:help ins-completion`, it is really good!
         mapping = cmp.mapping.preset.insert {
           -- Select the [n]ext item
-          ['<C-j>'] = cmp.mapping.select_next_item(),
-          -- Select the [p]revious item
-          ['<C-k>'] = cmp.mapping.select_prev_item(),
-
           ['<C-h>'] = cmp.mapping.select_next_item(),
+          -- Select the [p]revious item
           ['<C-t>'] = cmp.mapping.select_prev_item(),
 
+          ['<C-j>'] = cmp.mapping.select_next_item(),
+          ['<C-k>'] = cmp.mapping.select_prev_item(),
+
           -- Scroll the documentation window [b]ack / [f]orward
-          ['<C-e>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-g>'] = cmp.mapping.scroll_docs(4),
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+
           -- Accept ([y]es) the completion.
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
           ['<C-n>'] = cmp.mapping.confirm { select = true },
+
+          -- If you prefer more traditional completion keymaps,
+          -- you can uncomment the following lines
+          --['<CR>'] = cmp.mapping.confirm { select = true },
+          --['<Tab>'] = cmp.mapping.select_next_item(),
+          --['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
@@ -658,16 +677,16 @@ require('lazy').setup({
           --
           -- <c-l> will move you to the right of each of the expansion locations.
           -- <c-h> is similar, except moving you backwards.
-          ['<C-m>'] = cmp.mapping(function()
+          ['<C-d>'] = cmp.mapping(function()
             if luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
             end
           end, { 'i', 's' }),
-          ['<C-b>'] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            end
-          end, { 'i', 's' }),
+          -- ['<C-r>'] = cmp.mapping(function()
+          --   if luasnip.locally_jumpable(-1) then
+          --     luasnip.jump(-1)
+          --   end
+          -- end, { 'i', 's' }),
 
           -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -676,6 +695,7 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'nvim_lsp_signature_help' },
         },
       }
     end,
@@ -769,6 +789,8 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
+      --require('mini.animate').setup()
+
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
@@ -786,6 +808,25 @@ require('lazy').setup({
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
+    end,
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    config = function()
+      require('treesitter-context').setup {
+        enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+        max_lines = 5, -- How many lines the window should span. Values <= 0 mean no limit.
+        min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+        line_numbers = true,
+        multiline_threshold = 20, -- Maximum number of lines to show for a single context
+        trim_scope = 'outer', -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+        mode = 'cursor', -- Line used to calculate context. Choices: 'cursor', 'topline'
+        -- Separator between context and content. Should be a single character string, like '-'.
+        -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+        separator = nil,
+        zindex = 20, -- The Z-index of the context window
+        on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+      }
     end,
   },
   { -- Highlight, edit, and navigate code
@@ -818,6 +859,124 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
+  { -- The task runner we use
+    'stevearc/overseer.nvim',
+    opts = {
+      task_list = {
+        direction = 'bottom',
+        min_height = 25,
+        max_height = 25,
+        default_detail = 1,
+      },
+    },
+    config = function()
+      require('overseer').setup()
+      vim.keymap.set('n', '<leader>cc', '<CMD>OverseerRun<CR>', { desc = 'Open projects' })
+    end,
+  },
+  {
+    'ahmedkhalf/project.nvim',
+    event = 'VimEnter',
+    config = function()
+      require('project_nvim').setup {
+        patterns = { '.project', '.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', 'package.json' },
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+      require('telescope').load_extension 'projects'
+      vim.keymap.set('n', '<leader>jp', '<CMD>Telescope projects<CR>', { desc = 'Open projects' })
+    end,
+  },
+  {
+    'mfussenegger/nvim-dap',
+    event = 'VimEnter',
+    dependencies = {
+      -- Creates a beautiful debugger UI
+      'rcarriga/nvim-dap-ui',
+
+      -- Required dependency for nvim-dap-ui
+      'nvim-neotest/nvim-nio',
+
+      -- Installs the debug adapters for you
+      'williamboman/mason.nvim',
+      'jay-babu/mason-nvim-dap.nvim',
+
+      -- Add your own debuggers here
+      -- 'leoluz/nvim-dap-go',
+    },
+    config = function()
+      local dap = require 'dap'
+      local dapui = require 'dapui'
+
+      require('mason-nvim-dap').setup {
+        -- Makes a best effort to setup the various debuggers with
+        -- reasonable debug configurations
+        automatic_setup = true,
+        automatic_installation = true,
+
+        -- You can provide additional configuration to the handlers,
+        -- see mason-nvim-dap README for more information
+        handlers = {},
+
+        -- You'll need to check that you have the required things installed
+        -- online, please don't ask me how to install them :)
+        ensure_installed = {
+          -- Update this to ensure that you have the debuggers for the langs you want
+          --'delve',
+          'cpptools',
+        },
+      }
+
+      -- Basic debugging keymaps, feel free to change to your liking!
+      vim.keymap.set('n', '<leader>ds', dap.continue, { desc = 'Debug: Start/Continue' })
+      vim.keymap.set('n', '<leader>di', dap.step_into, { desc = 'Debug: Step Into' })
+      vim.keymap.set('n', '<leader>do', dap.step_over, { desc = 'Debug: Step Over' })
+      vim.keymap.set('n', '<leader>dO', dap.step_out, { desc = 'Debug: Step Out' })
+      vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
+      vim.keymap.set('n', '<leader>dB', function()
+        dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+      end, { desc = 'Debug: Set Breakpoint' })
+
+      -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
+      vim.keymap.set('n', '<leader>dz', dapui.toggle, { desc = 'Debug: See last session result.' })
+
+      local close = function()
+        require('focus').setup { autoresize = { enable = true } }
+        dapui.close()
+      end
+
+      local open = function()
+        require('focus').setup { autoresize = { enable = false } }
+        dapui.open()
+      end
+
+      dap.listeners.after.event_initialized['dapui_config'] = open
+      dap.listeners.before.event_terminated['dapui_config'] = close
+      dap.listeners.before.event_exited['dapui_config'] = close
+
+      -- dap.listeners.before.attach.dapui_config = function()
+      --   dapui.open()
+      -- end
+      -- dap.listeners.before.launch.dapui_config = function()
+      --   dapui.open()
+      -- end
+      -- dap.listeners.before.event_terminated.dapui_config = function()
+      --   dapui.close()
+      -- end
+      -- dap.listeners.before.event_exited.dapui_config = function()
+      --   dapui.close()
+      -- end
+      --
+      -- Dap UI setup
+      -- For more information, see |:help nvim-dap-ui|
+      dapui.setup()
+      --    dapui.setup()
+
+      -- Install golang specific config
+      -- require('dap-go').setup()
+    end,
+  },
   {
     'ThePrimeagen/harpoon',
     branch = 'harpoon2',
@@ -833,7 +992,8 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  --
+  --  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
 

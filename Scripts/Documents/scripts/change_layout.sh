@@ -3,6 +3,7 @@ BR="layout:     br"
 
 if [ "$BR" = "$(setxkbmap -query | grep layout)" ]; then
    # setxkbmap us -variant colemak_dh
+   #setxkbmap -layout us,us -variant engrammer,basic 
     setxkbmap us -variant dvorak
 else
     setxkbmap br

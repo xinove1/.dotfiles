@@ -1,4 +1,70 @@
 ;;;  -*- lexical-binding: t; -*-
+;;;
+(require 'org-roam-export)
+(setq org-html-preamble "---\n---")
+(setq org-publish-project-alist
+      '(
+        ("org-site"
+         ;; Path to your org files.
+         :base-directory "~/stuff/Notas/roam/site/"
+         :base-extension "org"
+
+         ;; Path to your Jekyll project.
+         :publishing-directory "~/stuff/xinove1.github.io/"
+         :recursive t
+         ;:publishing-function org-html-publish-to-html
+         :publishing-function org-md-publish-to-md
+         :headline-levels 4
+         :html-extension "html"
+         :body-only t ;; Only export section between <body> </body>
+         )
+
+        ("org-site-assets"
+         :base-directory "~/stuff/Notas/roam/site/"
+         :base-extension "yml\\|css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php"
+         :publishing-directory "~/stuff/xinove1.github.io/"
+         :recursive t
+         :publishing-function org-publish-attachment)
+
+        ("site" :components ("org-site" "org-site-assets"))
+        ))
+
+(defun t/org-roam-capture ()
+  (interactive)
+  (org-roam-capture- :node (org-roam-node-create)
+                     :templates '(
+                                  ("d" "default" plain "%?"
+                                   :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+                                   :unnarrowed t)
+                                  ("b" "blog post" plain "%?"
+                                   :if-new (file+head "site/_posts/%<%Y-%m-%d>-%(my/generate-name).org"
+                                                      "%(format \"#+title: %s\" my-org-note-name)\n #+filetags: site blog\n"))
+                                  ("w" "site page" plain "%?"
+                                   :if-new (file+head "site/%(my/generate-name).org"
+                                                      "%(format \"#+title: %s\" my-org-note-name)\n #+filetags: site\n"))
+                                  )))
+
+
+(defun my/find-site-nodes ()
+  (interactive)
+
+)
+
+(defun my/find-site-nodes (&optional other-window initial-input pred)
+  (interactive current-prefix-arg)
+  (let ((node (org-roam-node-read initial-input (lambda (node) (member "site" (org-roam-node-tags node)))  pred)))
+    (if (org-roam-node-file node)
+        (org-roam-node-visit node other-window)
+      (org-roam-capture-
+       :node node
+       :templates '(("d" "default" plain "%?"
+                     :target (file+head "site/posts/%<%Y%m%d>-${slug}.org" "#+title: ${title}\n")
+                     :unnarrowed t))
+       :props '(:finalize find-file)))))
+
+(defun my/generate-name ()
+  (setq my-org-note-name (read-string "Name: "))
+  my-org-note-name)
 
 ; https://github.com/org-roam/org-roam/issues/1633
 (remove-hook 'calendar-today-visible-hook #'org-roam-dailies-calendar-mark-entries)
@@ -36,6 +102,7 @@
         ("j" "journal" entry "*  [[id:d10cd556-cc88-4393-96d2-11526fa4fcfe][Journal]] - %<%A %d %R> \n  - %?"
          :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
 
+
 (setq org-agenda-show-future-repeats nil)
 
 (setq org-agenda-custom-commands
@@ -71,17 +138,6 @@
 (defun t/random-todo-heading-agenda()
   (interactive)
   (org-randomnote "TODO=\"TODO\""))
-
-(defun t/org-roam-capture ()
-  (interactive)
-  (org-roam-capture- :node (org-roam-node-create)
-                     :templates '(("n" "inbox note" plain "* [%<%A %d %R>] %?"
-                                   :if-new (file+head "Inbox.org" "#+title: Inbox\n"))
-                                  ("t" "inbox todo" entry "* TODO %? :teste:"
-                                   :if-new (file+head "Inbox.org" "#+title: Inbox\n"))
-                                  ("j" "journal" entry "*  [[id:d10cd556-cc88-4393-96d2-11526fa4fcfe][Journal]] - %<%A %d %R> \n  - %?"
-                                   :if-new (file+head "daily/%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))
-                                  )))
 
 ;; (defun t/org-roam-rg-search ()
 ;;   "Search org-roam directory using consult-ripgrep. With live-preview."
